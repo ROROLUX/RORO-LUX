@@ -142,12 +142,43 @@ files print identically on any machine.
 | `roro-lux-horizontal.svg` | One-line logo for headers, emails, invoices |
 | `roro-lux-monogram.svg` | RL seal for lids, boxes, social avatars |
 | `*-white.svg` | White versions for dark backgrounds |
-| `labels/candle-*.svg` | Front jar-label concepts, 70 × 90 mm, one per fragrance |
-| `labels/diffuser-*.svg` | Bottle-label concepts, 55 × 71 mm, one per fragrance |
+| `labels/candle-*.pdf` | **Print-ready candle labels**, 48 × 72 mm, vector, one per fragrance |
+| `labels/candle-*.svg` | The same candle labels as editable SVG |
+| `labels/diffuser-*.svg` | Bottle-label concepts, 55 × 71 mm, one per fragrance (earlier style) |
+| `mockups/mockup-*.jpg` | Photorealistic 3D renders of each candle, a close-up and the collection |
 
-The label concepts must be resized to your printer’s die line once the exact
-200 ml jar and 100 ml bottle are confirmed. To regenerate everything after changing product data:
+### Candle labels
+
+The candle labels follow the approved layout in `source/label-reference.png`.
+They use Cormorant Garamond (RORO LUX), Kurale (candle name and notes),
+Montserrat (small capitals) and Source Serif 4 (the three features) — all SIL
+Open Font License, so they may be printed commercially. Every letter is
+converted to vector outlines: the printer needs no fonts.
+
+Before printing, check:
+
+- **Size.** 48 × 72 mm is a starting point. Ask the printer for the die line of
+  your exact 200 ml jar and change `LABEL_MM` in `source/make_candle_labels.py`.
+- **Claims.** "100% natural soy wax", "Hand poured", "Clean burning",
+  "Eco-conscious", "Made in Kenya" and the net weight must all be true of the
+  finished product. Edit them at the top of `source/make_candle_labels.py`.
+- **Net weight.** Weigh the wax in a filled jar; a 200 ml jar usually holds less
+  than 200 g of soy wax.
+
+Regenerate after any change:
+`pip install fonttools brotli uharfbuzz cairosvg && python3 brand/source/make_candle_labels.py`
+
+The diffuser label concepts must be resized to your printer's die line once the
+100 ml bottle is confirmed. Regenerate them with
 `pip install fonttools brotli && npm run brand`.
+
+### Mockups
+
+`mockups/` holds 3D renders of the candles, built from the real label files
+on a modelled clear 200 ml glass jar (72 mm × 86 mm) with white soy wax and a
+cotton wick. They are renders, not photographs; replace them with product
+photography once production samples exist. The scene is in
+`source/mockup/scene.html` (three.js).
 
 Typefaces: Cormorant Garamond (headings) and Jost (body), both under the SIL Open
 Font License — free for commercial use, including on packaging.

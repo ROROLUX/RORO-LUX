@@ -1,0 +1,200 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#fff}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/three/build/three.module.js","three/addons/":"/three/examples/jsm/"}}</script>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const params = new URLSearchParams(location.search);
+const W = +params.get('w') || 1600, H = +params.get('h') || 2000;
+const labels = (params.get('labels') || 'candle-stay-grounded').split(',');
+const view = params.get('view') || 'hero';
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(W, H);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.95;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.VSMShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#DED6CB');
+const pmrem = new THREE.PMREMGenerator(renderer);
+// Photo-studio environment: a dim room with a tall window on the left, a narrow
+// strip light on the right and a soft overhead box. These are what draw the
+// crisp highlights on real glass.
+function studio() {
+  const env = new THREE.Scene();
+  const room = new THREE.Mesh(new THREE.BoxGeometry(60, 30, 60),
+    new THREE.MeshBasicMaterial({ color: new THREE.Color(0.10, 0.095, 0.09), side: THREE.BackSide }));
+  env.add(room);
+  const panel = (w, h, pos, rotY, k, tint = [1, 0.97, 0.92]) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h),
+      new THREE.MeshBasicMaterial({ color: new THREE.Color(tint[0] * k, tint[1] * k, tint[2] * k), side: THREE.DoubleSide }));
+    m.position.set(...pos); m.rotation.y = rotY; env.add(m);
+  };
+  panel(9, 18, [-24, 2, 6], Math.PI / 2, 14);              // tall window, left
+  panel(2.2, 20, [22, 1, -4], -Math.PI / 2, 10, [0.95, 0.97, 1]); // strip light, right
+  const top = new THREE.Mesh(new THREE.PlaneGeometry(16, 16),
+    new THREE.MeshBasicMaterial({ color: new THREE.Color(2.2, 2.2, 2.1), side: THREE.DoubleSide }));
+  top.position.set(0, 14, 0); top.rotation.x = Math.PI / 2; env.add(top);
+  panel(30, 10, [0, -2, 28], Math.PI, 0.6);               // soft bounce behind camera
+  return env;
+}
+scene.environment = pmrem.fromScene(studio(), 0.02).texture;
+scene.environmentIntensity = 1.0;
+
+// ---------- Units: centimetres ----------
+const R_OUT = 3.6, R_IN = 3.3, H_JAR = 8.6, BASE = 0.75, WAX_TOP = 6.3;
+
+function noiseTexture(size, base, amp, seed = 1) {
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d'); const img = g.createImageData(size, size);
+  let s = seed; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < size * size; i++) {
+    const n = (rnd() - 0.5) * amp;
+    img.data[i * 4] = base[0] + n; img.data[i * 4 + 1] = base[1] + n; img.data[i * 4 + 2] = base[2] + n; img.data[i * 4 + 3] = 255;
+  }
+  g.putImageData(img, 0, 0);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+// Surface: warm stone / linen tabletop, and a soft paper backdrop sweep.
+const tableTex = noiseTexture(512, [218, 210, 199], 10, 7); tableTex.repeat.set(8, 8);
+// Seamless studio sweep: the tabletop curves up into the backdrop.
+function sweep() {
+  const prof = [];
+  for (let z = 120; z > -25; z -= 5) prof.push([z, 0]);
+  const rc = 30;
+  for (let i = 0; i <= 24; i++) { const a = (i / 24) * Math.PI / 2; prof.push([-25 - rc * Math.sin(a), rc - rc * Math.cos(a)]); }
+  for (let y = rc + 10; y <= 220; y += 10) prof.push([-25 - rc, y]);
+  const geo = new THREE.PlaneGeometry(500, 1, 1, prof.length - 1);
+  const pos = geo.attributes.position, uv = geo.attributes.uv;
+  let acc = 0;
+  for (let j = 0; j < prof.length; j++) {
+    if (j) acc += Math.hypot(prof[j][0] - prof[j - 1][0], prof[j][1] - prof[j - 1][1]);
+    for (let i = 0; i < 2; i++) {
+      const k = j * 2 + i;
+      pos.setXYZ(k, i === 0 ? -250 : 250, prof[j][1], prof[j][0]);
+      uv.setXY(k, i, acc / 60);
+    }
+  }
+  geo.computeVertexNormals();
+  return geo;
+}
+const table = new THREE.Mesh(sweep(), new THREE.MeshStandardMaterial({ map: tableTex, roughness: 0.92, side: THREE.DoubleSide }));
+table.receiveShadow = true; scene.add(table);
+
+
+// ---------- Glass jar (solid lathe: inner + outer wall) ----------
+function jarProfile() {
+  const p = [];
+  const arc = (cx, cy, r, a0, a1, n) => { for (let i = 0; i <= n; i++) { const a = a0 + (a1 - a0) * i / n; p.push(new THREE.Vector2(cx + r * Math.cos(a), cy + r * Math.sin(a))); } };
+  p.push(new THREE.Vector2(0.001, BASE));                    // inner floor centre
+  arc(R_IN - 0.35, BASE + 0.35, 0.35, -Math.PI / 2, 0, 8);   // inner floor fillet
+  p.push(new THREE.Vector2(R_IN, H_JAR - 0.15));             // inner wall
+  arc((R_IN + R_OUT) / 2, H_JAR - 0.15, (R_OUT - R_IN) / 2, Math.PI, 0, 10); // rounded rim
+  p.push(new THREE.Vector2(R_OUT, 0.5));                     // outer wall
+  arc(R_OUT - 0.5, 0.5, 0.5, 0, -Math.PI / 2, 10);           // outer bottom fillet
+  p.push(new THREE.Vector2(0.001, 0.0));                     // outer base centre
+  return p.reverse();
+}
+const glassMat = new THREE.MeshPhysicalMaterial({
+  color: '#FFFFFF', metalness: 0, roughness: 0.015, transmission: 1, ior: 1.52, thickness: 0.6,
+  attenuationColor: new THREE.Color('#DCEBE4'), attenuationDistance: 9, specularIntensity: 1,
+  envMapIntensity: 1.6, clearcoat: 1.0, clearcoatRoughness: 0.01, side: THREE.DoubleSide,
+});
+
+// ---------- Soy wax ----------
+const waxMat = new THREE.MeshPhysicalMaterial({
+  color: '#F8F1E4', roughness: 0.55, emissive: new THREE.Color('#3A362F'), emissiveIntensity: 0.35, sheen: 0.35, sheenRoughness: 0.8, sheenColor: new THREE.Color('#FFFFFF'),
+  transmission: 0.05, thickness: 2,
+});
+const waxTopTex = noiseTexture(256, [128, 128, 128], 26, 3);
+
+function makeCandle(labelUrl) {
+  const g = new THREE.Group();
+
+  const jar = new THREE.Mesh(new THREE.LatheGeometry(jarProfile(), 160), glassMat);
+  g.add(jar);
+
+  const waxH = WAX_TOP - BASE;
+  const wax = new THREE.Mesh(new THREE.CylinderGeometry(R_IN - 0.005, R_IN - 0.005, waxH, 160, 1), waxMat);
+  wax.position.y = BASE + waxH / 2; wax.castShadow = true; g.add(wax);
+  const waxTop = new THREE.Mesh(new THREE.CircleGeometry(R_IN - 0.01, 160),
+    new THREE.MeshPhysicalMaterial({ color: '#F9F2E6', roughness: 0.48, emissive: new THREE.Color('#3A362F'), emissiveIntensity: 0.3, bumpMap: waxTopTex, bumpScale: 0.004, sheen: 0.3, sheenColor: new THREE.Color('#fff') }));
+  waxTop.rotation.x = -Math.PI / 2; waxTop.position.y = WAX_TOP + 0.002; g.add(waxTop);
+
+  // Unburnt cotton wick, slightly bent, with a darker tip.
+  const curve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0, WAX_TOP - 0.1, 0), new THREE.Vector3(0.02, WAX_TOP + 0.45, 0.0),
+    new THREE.Vector3(0.09, WAX_TOP + 0.9, 0.03), new THREE.Vector3(0.17, WAX_TOP + 1.15, 0.05)]);
+  const wick = new THREE.Mesh(new THREE.TubeGeometry(curve, 24, 0.065, 12),
+    new THREE.MeshStandardMaterial({ color: '#CFC3AD', roughness: 1 }));
+  wick.castShadow = true; g.add(wick);
+
+  // Paper sticker wrapped around the glass (48 x 72 mm, arc length 4.8 cm).
+  const LW = 4.8, LH = 7.2, LY = 4.35;
+  const theta = LW / R_OUT;
+  const labelGeo = new THREE.CylinderGeometry(R_OUT + 0.004, R_OUT + 0.004, LH, 96, 1, true, -theta / 2, theta);
+  const tex = new THREE.TextureLoader().load(labelUrl);
+  tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const paperBump = noiseTexture(512, [128, 128, 128], 18, 11);
+  const label = new THREE.Mesh(labelGeo, new THREE.MeshPhysicalMaterial({
+    map: tex, emissiveMap: tex, emissive: new THREE.Color('#FFFFFF'), emissiveIntensity: 0.32, transparent: true, roughness: 0.82, envMapIntensity: 0.55, bumpMap: paperBump, bumpScale: 0.0015, sheen: 0.2, sheenColor: new THREE.Color('#fff'),
+  }));
+  label.position.y = LY; label.castShadow = true; g.add(label);
+  const backing = new THREE.Mesh(labelGeo, new THREE.MeshStandardMaterial({ color: '#F4F4F2', roughness: 0.9, side: THREE.BackSide, transparent: true }));
+  backing.position.y = LY; g.add(backing);
+
+  // Soft contact shadow under the glass base.
+  const cs = document.createElement('canvas'); cs.width = cs.height = 256;
+  const cg = cs.getContext('2d'); const grd = cg.createRadialGradient(128, 128, 20, 128, 128, 128);
+  grd.addColorStop(0, 'rgba(40,32,24,0.55)'); grd.addColorStop(0.55, 'rgba(40,32,24,0.18)'); grd.addColorStop(1, 'rgba(40,32,24,0)');
+  cg.fillStyle = grd; cg.fillRect(0, 0, 256, 256);
+  const contact = new THREE.Mesh(new THREE.PlaneGeometry(R_OUT * 2.9, R_OUT * 2.9),
+    new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cs), transparent: true, depthWrite: false }));
+  contact.rotation.x = -Math.PI / 2; contact.position.y = 0.01; g.add(contact);
+  return g;
+}
+
+// ---------- Layout ----------
+const spacing = 8.3;
+const CAM_Z = 66;
+labels.forEach((name, i) => {
+  const c = makeCandle(`/labels/${name}.png`);
+  const n = labels.length;
+  c.position.x = (i - (n - 1) / 2) * spacing;
+  // Turn each jar so its label faces the camera, as a photographer would.
+  c.rotation.y = n > 1 ? Math.atan2(-c.position.x, CAM_Z) : -0.06;
+  scene.add(c);
+});
+
+// Window light from the upper left, plus a gentle fill.
+const sun = new THREE.DirectionalLight('#FFF4E6', 2.2);
+sun.position.set(-30, 38, 26); sun.castShadow = true;
+sun.shadow.mapSize.set(4096, 4096); sun.shadow.radius = 14; sun.shadow.blurSamples = 24;
+Object.assign(sun.shadow.camera, { left: -40, right: 40, top: 40, bottom: -40, near: 1, far: 140 });
+sun.shadow.bias = -0.0004;
+scene.add(sun);
+const fill = new THREE.DirectionalLight('#F3F6FF', 0.5); fill.position.set(30, 14, 30); scene.add(fill);
+scene.add(new THREE.HemisphereLight('#FFFFFF', '#D9CFC2', 0.25));
+
+const camera = new THREE.PerspectiveCamera(labels.length > 1 ? 26 : 22, W / H, 0.5, 600);
+if (labels.length > 1) { camera.position.set(0, 21, CAM_Z); camera.lookAt(0, 4.4, 0); camera.fov = 24; camera.updateProjectionMatrix(); }
+else if (view === 'close') { camera.position.set(0, 7.5, 21); camera.lookAt(0, 4.6, 0); camera.fov = 26; camera.updateProjectionMatrix(); }
+else { camera.position.set(0, 19, 40); camera.lookAt(0, 4.2, 0); camera.fov = 24; camera.updateProjectionMatrix(); }
+
+THREE.DefaultLoadingManager.onLoad = () => {
+  renderer.render(scene, camera);
+  renderer.render(scene, camera);
+  document.title = 'done';
+};
+</script>
+</body></html>

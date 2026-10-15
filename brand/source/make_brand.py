@@ -167,7 +167,7 @@ def favicon():
 
 LABEL_KINDS = {
     # kind: (product type line, size key, scale). Scale 1 = 70 x 90 mm.
-    "candle": ("SCENTED CANDLE", "candleSize", 1.0),
+    # Candle labels now come from make_candle_labels.py (the approved layout).
     "diffuser": ("REED DIFFUSER", "diffuserSize", 55 / 70),  # 55 x 70.7 mm
 }
 

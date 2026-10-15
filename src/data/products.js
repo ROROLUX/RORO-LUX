@@ -9,6 +9,8 @@
 //   'available' – on sale (requires checkout to be connected first)
 //   'sold-out'  – shown, but not purchasable
 //
+// `labelNotes` is the short notes line printed on the jar label.
+//
 // `image` (candle) and `diffuserImage` take a photo path once photography
 // exists, e.g. '/images/safe-diffuser.jpg'. Until then an illustration is shown.
 //
@@ -52,6 +54,7 @@ export const products = [
     feeling: 'Coming back to yourself.',
     accord: 'Rain-kissed earth · Fresh greenery · Quiet woods',
     notes: ['Rain', 'Petrichor', 'Soft moss', 'White musk'],
+    labelNotes: 'Rain, Moss & White Musk',
     description:
       'Inspired by the distinctive freshness of rain falling on dry earth, Stay Grounded is envisioned as a refined, earthy fragrance with an airy opening, a green and mineral heart, and a soft woody-musk finish.',
     why:
@@ -73,6 +76,7 @@ export const products = [
     feeling: 'Warmth, comfort, and belonging.',
     accord: 'Creamy vanilla · Sandalwood · Soft amber',
     notes: ['Vanilla', 'Sandalwood', 'Soft amber'],
+    labelNotes: 'Vanilla, Sandalwood & Amber',
     description:
       'Safe is envisioned as a smooth, enveloping fragrance that makes a space feel welcoming. Creamy vanilla provides familiarity, while sandalwood and a subtle amber accord introduce depth and sophistication.',
     why:
@@ -94,6 +98,7 @@ export const products = [
     feeling: 'A slow, sensual calm that fills the room.',
     accord: 'Jasmine & ylang-ylang · Lily of the valley · Amber',
     notes: ['Jasmine', 'Ylang-ylang', 'Lily of the valley', 'Amber'],
+    labelNotes: 'Jasmine, Ylang-Ylang & Amber',
     description:
       'Healing begins with a light floral brightness before deepening into the soft richness of jasmine and ylang-ylang. The base is warm and creamy, leaving behind a peaceful, lingering softness.',
     why:
@@ -115,6 +120,7 @@ export const products = [
     feeling: 'A gentle exhale at the end of a long day.',
     accord: 'Lavender & chamomile · Neroli · White musk',
     notes: ['Lavender', 'Chamomile', 'Neroli', 'White musk'],
+    labelNotes: 'Lavender, Chamomile & Neroli',
     description:
       'Quiet the Noise opens with a soft, airy freshness before settling into lavender and chamomile. As the fragrance settles, a warm, clean musky base slowly emerges, wrapping the room in a sense of stillness.',
     why:
@@ -136,6 +142,7 @@ export const products = [
     feeling: 'Clean without being sharp. Fresh without being cold.',
     accord: 'Bergamot & eucalyptus · Vetiver · Soft woods',
     notes: ['Bergamot', 'Eucalyptus', 'Vetiver', 'Soft woods'],
+    labelNotes: 'Bergamot, Eucalyptus & Vetiver',
     description:
       'Bright bergamot opens the fragrance, followed by cool, clean eucalyptus. A soft woody base of vetiver anchors it, creating harmony between energy and calm.',
     why:
