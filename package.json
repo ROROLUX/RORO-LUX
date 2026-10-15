@@ -1,0 +1,15 @@
+{
+  "name": "roro-lux",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "brand": "python3 brand/source/make_brand.py"
+  },
+  "devDependencies": {
+    "wrangler": "^4.151.0"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "roro-lux",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-01",
+  "observability": { "enabled": true },
+
+  // Builds ./public from ./src before every `wrangler dev` and `wrangler deploy`.
+  "build": { "command": "node build.mjs" },
+
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    // Only the form endpoints run the Worker; every page is served directly.
+    "run_worker_first": ["/api/*"]
+  },
+
+  // Waitlist sign-ups and contact messages. On the first `wrangler deploy`,
+  // Wrangler creates this database automatically and writes its
+  // database_id back into this file — commit that change afterwards.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "roro-lux"
+    }
+  ]
+
+  // Optional contact-form email alerts (see README):
+  // "vars": {
+  //   "CONTACT_TO_EMAIL": "hello@yourdomain",
+  //   "CONTACT_FROM_EMAIL": "RORO LUX Website <website@yourdomain>"
+  // }
+  // plus the secret:  npx wrangler secret put RESEND_API_KEY
+}
