@@ -5,9 +5,6 @@ emotional wellbeing. It runs on Cloudflare Workers: static pages, plus two small
 form endpoints that store waitlist sign-ups and contact messages in a Cloudflare
 D1 database.
 
-This folder is completely separate from the RoxAI agency site at the root of the
-repository. The root `.assetsignore` keeps it out of the agency deployment.
-
 ## What is in the first release
 
 | Page | Path |
@@ -52,7 +49,6 @@ its colour). To use a photo, put it in `src/static/images/` and set the product�
 Requires Node.js 18 or newer.
 
 ```bash
-cd roro-lux
 npm install
 npm run dev        # builds the site and serves it at http://localhost:8787
 ```
@@ -64,7 +60,6 @@ Forms work locally too; submissions go into a local copy of the database.
 ### Option A — from your computer
 
 ```bash
-cd roro-lux
 npx wrangler login
 npm run deploy
 ```
@@ -76,9 +71,9 @@ deploys stay linked to the same database.
 ### Option B — automatic deploys from GitHub (Workers Builds)
 
 In the Cloudflare dashboard: **Workers & Pages → Create → Import a repository**,
-pick this repository, and set:
+pick the `RORO-LUX` repository, and set:
 
-- **Root directory:** `roro-lux`
+- **Root directory:** leave as the repository root
 - **Build command:** leave empty (Wrangler runs the build itself)
 - **Deploy command:** `npx wrangler deploy`
 
