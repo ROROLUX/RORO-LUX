@@ -44,6 +44,37 @@ export const posts = [
 `,
   },
   {
+    slug: 'reed-diffuser-care',
+    title: 'How to care for your reed diffuser',
+    date: '2026-10-15',
+    category: 'Diffuser care',
+    excerpt:
+      'Where to place it, how often to turn the reeds, and how to use an essential-oil diffuser safely at home.',
+    body: `
+<p>A reed diffuser asks very little of you — but a few simple habits help it scent your room evenly and last as long as possible.</p>
+<h2>Setting it up</h2>
+<p>Place the diffuser on a stable, level surface, then remove the stopper and put the reeds into the bottle. After about an hour, turn the reeds over so that both ends are saturated. Do this over a sink or a cloth, as the reeds can drip.</p>
+<h2>Choosing the right spot</h2>
+<ul>
+  <li>Somewhere with gentle airflow — a hallway, an entrance or near a doorway helps the fragrance travel.</li>
+  <li>Away from direct sunlight, radiators, candles and other heat sources, which make the oil evaporate faster.</li>
+  <li>On a coaster, tray or stone surface. Essential oils can mark polished wood, painted finishes and some plastics.</li>
+  <li>Out of reach of children and pets, and where it cannot be knocked over.</li>
+</ul>
+<h2>Turning the reeds</h2>
+<p>Turn the reeds about once a week to refresh the fragrance. Turning them more often makes the scent stronger but uses the oil more quickly. Wash your hands after handling the reeds.</p>
+<h2>Using essential oils safely</h2>
+<ul>
+  <li>The oil is for scenting a room only. Never swallow it, and keep it away from skin and eyes. If contact happens, rinse with plenty of water; if it is swallowed, seek medical advice straight away.</li>
+  <li>Some essential oils are harmful to pets, particularly cats. If you share your home with animals, ask your vet before using any essential-oil product.</li>
+  <li>The oil may be flammable. Keep the diffuser away from open flames, including lit candles.</li>
+  <li>If anyone in your home is pregnant, has asthma or is sensitive to fragrance, use the diffuser in a well-ventilated room and stop if it causes discomfort.</li>
+</ul>
+<h2>When it is finished</h2>
+<p>When the bottle is empty, discard the used reeds. The glass bottle can be washed with warm soapy water and reused — as a bud vase, for example.</p>
+`,
+  },
+  {
     slug: 'candle-care',
     title: 'How to care for your candle',
     date: '2026-10-15',

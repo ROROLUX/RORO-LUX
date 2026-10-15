@@ -27,7 +27,7 @@ export function journalIndex() {
 ${pageHero({
   eyebrow: 'Journal',
   title: 'Notes on scent, ritual and wellbeing.',
-  lede: 'Thoughtful, practical writing about intentional living, caring for your candles, and the small rituals that make room for yourself.',
+  lede: 'Thoughtful, practical writing about intentional living, caring for your candles and diffusers, and the small rituals that make room for yourself.',
 })}
 <section class="section section-tight">
   <div class="container narrow"><div class="post-list">${list}</div></div>
@@ -35,7 +35,7 @@ ${pageHero({
   return layout({
     path: '/journal',
     title: 'Journal',
-    description: 'The RORO LUX journal: notes on scent, self-care rituals, candle care and mental-health awareness.',
+    description: 'The RORO LUX journal: notes on scent, self-care rituals, candle and diffuser care, and mental-health awareness.',
     body,
     nav: 'journal',
   });

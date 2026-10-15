@@ -13,7 +13,7 @@ import home from './src/pages/home.js';
 import story from './src/pages/story.js';
 import purpose from './src/pages/purpose.js';
 import contact from './src/pages/contact.js';
-import { collection, productPage } from './src/pages/collection.js';
+import { collection, diffusers, productPage, diffuserPage } from './src/pages/collection.js';
 import { journalIndex, journalPost } from './src/pages/journal.js';
 import { privacy, notFound } from './src/pages/legal.js';
 
@@ -25,6 +25,8 @@ const pages = [
   ['index.html', home(), true],
   ['collection.html', collection(), true],
   ...products.map((p) => [`collection/${p.slug}.html`, productPage(p), true]),
+  ['diffusers.html', diffusers(), true],
+  ...products.map((p) => [`diffusers/${p.slug}.html`, diffuserPage(p), true]),
   ['story.html', story(), true],
   ['purpose.html', purpose(), true],
   ['journal.html', journalIndex(), true],

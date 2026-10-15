@@ -19,6 +19,7 @@ import { products } from './data/products.js';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const FRAGRANCES = new Set(products.map((p) => p.slug));
+const FORMATS = new Set(['candle', 'diffuser']);
 const TOPICS = new Set(['General', 'The collection', 'Gifting or corporate orders', 'Collaboration or press', 'Stockists']);
 // Bump when the consent wording on the waitlist form changes.
 const CONSENT_VERSION = '2026-10-15';
@@ -29,6 +30,7 @@ const SCHEMA = [
     email TEXT NOT NULL UNIQUE COLLATE NOCASE,
     name TEXT,
     fragrance TEXT,
+    format TEXT,
     consent_version TEXT NOT NULL,
     consented_at TEXT NOT NULL,
     country TEXT,
@@ -45,6 +47,10 @@ const SCHEMA = [
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   )`,
 ];
+
+// Columns added after the first release. Each is applied once to databases
+// created before it existed; "duplicate column" errors mean it is already there.
+const MIGRATIONS = ['ALTER TABLE waitlist ADD COLUMN format TEXT'];
 
 let schemaReady = false;
 
@@ -101,6 +107,7 @@ async function handleWaitlist(request, env, data) {
   const email = clean(data.email, 254).toLowerCase();
   const name = clean(data.name, 80);
   const fragrance = FRAGRANCES.has(data.fragrance) ? data.fragrance : null;
+  const format = FORMATS.has(data.format) ? data.format : null;
 
   if (!EMAIL_PATTERN.test(email)) {
     return json({ error: 'Please enter a valid email address.' }, 400);
@@ -111,16 +118,17 @@ async function handleWaitlist(request, env, data) {
 
   const now = new Date().toISOString();
   await env.DB.prepare(
-    `INSERT INTO waitlist (email, name, fragrance, consent_version, consented_at, country)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+    `INSERT INTO waitlist (email, name, fragrance, format, consent_version, consented_at, country)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
      ON CONFLICT(email) DO UPDATE SET
        name = COALESCE(excluded.name, waitlist.name),
        fragrance = COALESCE(excluded.fragrance, waitlist.fragrance),
+       format = COALESCE(excluded.format, waitlist.format),
        consent_version = excluded.consent_version,
        consented_at = excluded.consented_at,
        updated_at = datetime('now')`,
   )
-    .bind(email, name || null, fragrance, CONSENT_VERSION, now, request.cf?.country || null)
+    .bind(email, name || null, fragrance, format, CONSENT_VERSION, now, request.cf?.country || null)
     .run();
 
   return json({ ok: true, message: 'Thank you — you are on the list. We will be in touch before launch.' }, 200);
@@ -170,6 +178,13 @@ async function handleContact(request, env, data) {
 async function ensureSchema(db) {
   if (schemaReady) return;
   await db.batch(SCHEMA.map((sql) => db.prepare(sql)));
+  for (const sql of MIGRATIONS) {
+    try {
+      await db.prepare(sql).run();
+    } catch (err) {
+      if (!/duplicate column/i.test(String(err?.message || err))) throw err;
+    }
+  }
   schemaReady = true;
 }
 

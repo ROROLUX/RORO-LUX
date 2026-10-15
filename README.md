@@ -10,17 +10,32 @@ D1 database.
 | Page | Path |
 | --- | --- |
 | Home | `/` |
-| The Collection | `/collection` |
-| Product pages (×5) | `/collection/stay-grounded`, `/safe`, `/healing`, `/quiet-the-noise`, `/balance` |
+| Scented candles | `/collection` |
+| Candle pages (×5) | `/collection/stay-grounded`, `/safe`, `/healing`, `/quiet-the-noise`, `/balance` |
+| Reed diffusers | `/diffusers` |
+| Diffuser pages (×5) | `/diffusers/stay-grounded`, `/safe`, `/healing`, `/quiet-the-noise`, `/balance` |
 | Our Story | `/story` |
 | Our Purpose (with a support-lines section) | `/purpose` |
-| Journal (3 starter entries) | `/journal` |
+| Journal (4 starter entries) | `/journal` |
 | Contact & FAQs | `/contact` |
 | Privacy policy | `/privacy` |
 
+Every fragrance comes in two formats:
+
+| Format | Size | Price |
+| --- | --- | --- |
+| Scented candle | 200 ml clear glass jar | KSh 3,000 |
+| Reed diffuser (made with essential oils) | 100 ml clear glass bottle, reeds included | KSh 4,500 |
+
 Every product is marked **In development — join the waitlist**. The waitlist
-asks visitors which fragrance they are most drawn to, which gives you real
-demand data for deciding which fragrances to produce first.
+asks visitors which fragrance and which format they are most drawn to, which
+gives you real demand data for deciding what to produce first.
+
+**On the essential-oil claim.** The site says the diffusers are *made with*
+essential oils — never "100%" or "only". Some of the current notes (rain,
+petrichor, white musk, lily of the valley) have no essential-oil equivalent,
+and the FAQ says so plainly. Once your supplier confirms each diffuser's
+formula, publish it on the product page (`src/pages/collection.js`).
 
 ## Editing content
 
@@ -30,7 +45,7 @@ on every deploy.
 | To change… | Edit |
 | --- | --- |
 | Domain, email, Instagram, TikTok, legal name | `src/site.config.js` |
-| Product names, notes, descriptions, colours, price, size, status | `src/data/products.js` |
+| Product names, notes, descriptions, colours, prices, sizes, status (candle and diffuser) | `src/data/products.js` |
 | FAQs | `src/data/faqs.js` |
 | Journal entries | `src/data/journal.js` |
 | Page copy | `src/pages/*.js` |
@@ -41,8 +56,10 @@ site automatically, and the build prints a reminder for each one.
 
 **Photography.** Until product photos exist, each candle is shown as an
 illustration of the real product (clear jar, plain white wax, white label, name in
-its colour). To use a photo, put it in `src/static/images/` and set the product’s
-`image` field, e.g. `image: '/images/stay-grounded.jpg'`. Portrait 4:5 works best.
+its colour), and each diffuser as an illustration of the clear bottle with reeds. To
+use a photo, put it in `src/static/images/` and set the product’s `image` (candle)
+or `diffuserImage` field, e.g. `diffuserImage: '/images/safe-diffuser.jpg'`.
+Portrait 4:5 works best.
 
 ## Running it locally
 
@@ -91,8 +108,9 @@ switches on the sitemap, canonical links and social-sharing previews.
 In the dashboard: **Storage & Databases → D1 → roro-lux → Console**, then run:
 
 ```sql
-SELECT email, name, fragrance, created_at FROM waitlist ORDER BY created_at DESC;
+SELECT email, name, fragrance, format, created_at FROM waitlist ORDER BY created_at DESC;
 SELECT fragrance, COUNT(*) AS votes FROM waitlist GROUP BY fragrance ORDER BY votes DESC;
+SELECT format, COUNT(*) AS votes FROM waitlist GROUP BY format ORDER BY votes DESC;
 SELECT name, email, topic, message, created_at FROM messages ORDER BY created_at DESC;
 ```
 
@@ -124,10 +142,11 @@ files print identically on any machine.
 | `roro-lux-horizontal.svg` | One-line logo for headers, emails, invoices |
 | `roro-lux-monogram.svg` | RL seal for lids, boxes, social avatars |
 | `*-white.svg` | White versions for dark backgrounds |
-| `labels/label-*.svg` | Front jar-label concepts, 70 × 90 mm, one per fragrance |
+| `labels/candle-*.svg` | Front jar-label concepts, 70 × 90 mm, one per fragrance |
+| `labels/diffuser-*.svg` | Bottle-label concepts, 55 × 71 mm, one per fragrance |
 
 The label concepts must be resized to your printer’s die line once the exact
-200 ml jar is confirmed. To regenerate everything after changing product data:
+200 ml jar and 100 ml bottle are confirmed. To regenerate everything after changing product data:
 `pip install fonttools brotli && npm run brand`.
 
 Typefaces: Cormorant Garamond (headings) and Jost (body), both under the SIL Open

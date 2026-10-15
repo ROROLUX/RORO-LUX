@@ -72,7 +72,7 @@ ${pageHero({
   return layout({
     path: '/contact',
     title: 'Contact & FAQs',
-    description: 'Contact RORO LUX and find answers about orders, delivery, returns, candle care and ingredients.',
+    description: 'Contact RORO LUX and find answers about orders, delivery, returns, candle and diffuser care, and ingredients.',
     body,
     nav: 'contact',
   });

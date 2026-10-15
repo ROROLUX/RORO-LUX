@@ -3,7 +3,7 @@ import { site } from '../site.config.js';
 
 const values = [
   ['Intentionality', 'Every fragrance, name and customer interaction should have a reason behind it.'],
-  ['Quality', 'Well-balanced fragrances, safe candle performance, thoughtful packaging and a premium customer experience.'],
+  ['Quality', 'Well-balanced fragrances, safe and reliable performance, thoughtful packaging and a premium customer experience.'],
   ['Emotional awareness', 'We create space for honest conversations about the feelings people experience.'],
   ['An accessible message', 'Luxury is our product positioning, but the message that mental health matters should reach people far beyond our customers.'],
   ['Authenticity', 'We communicate honestly about our products, our production partners, and what fragrance can and cannot do for wellbeing.'],
@@ -87,13 +87,13 @@ ${pageHero({
 <section class="section section-soft" id="how-we-make">
   <div class="container split">
     <div>
-      <p class="eyebrow">How our candles are made</p>
+      <p class="eyebrow">How our products are made</p>
       <h2>Honest about every step.</h2>
     </div>
     <div class="prose">
-      <p>RORO LUX works with specialist candle manufacturers and suppliers — including potential manufacturing partners in China — to produce our candles, develop the fragrance profiles and customise the vessels and packaging.</p>
+      <p>RORO LUX works with specialist candle manufacturers and suppliers — including potential manufacturing partners in China — to produce our candles and reed diffusers, develop the fragrance profiles and customise the vessels and packaging. Our diffusers are made with essential oils, and we will publish the full formula for each one before launch.</p>
       <p>Our own focus is fragrance selection, brand development, quality control, customer experience and mental-health advocacy. We evaluate samples before confirming any production run rather than assuming a proposed fragrance will perform as intended, and we aim to establish consistent quality before we scale.</p>
-      <p>That means RORO LUX is a fragrance and wellness brand — not a claim that every candle is handmade by the founder. We think you deserve to know the difference.</p>
+      <p>That means RORO LUX is a fragrance and wellness brand — not a claim that every product is handmade by the founder. We think you deserve to know the difference.</p>
     </div>
   </div>
 </section>
@@ -101,8 +101,8 @@ ${pageHero({
 <section class="section">
   <div class="container narrow center">
     <p class="eyebrow">Looking ahead</p>
-    <h2>Candles are where we begin.</h2>
-    <p>In time, we hope to grow into complementary home fragrances, thoughtfully designed gift sets, a library of reflective wellness resources, and collaborations with qualified mental-health professionals and community initiatives. These are ambitions, not achievements — and we will pursue each one only when we can do it well.</p>
+    <h2>Candles and diffusers are where we begin.</h2>
+    <p>In time, we hope to grow into further home fragrances, thoughtfully designed gift sets, a library of reflective wellness resources, and collaborations with qualified mental-health professionals and community initiatives. These are ambitions, not achievements — and we will pursue each one only when we can do it well.</p>
   </div>
 </section>
 

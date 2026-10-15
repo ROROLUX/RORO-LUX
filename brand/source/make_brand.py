@@ -165,12 +165,21 @@ def favicon():
     return svg(S, S, "".join(parts), "RORO LUX")
 
 
-def label(product):
-    """Front jar-label concept (white paper sticker).
+LABEL_KINDS = {
+    # kind: (product type line, size key, scale). Scale 1 = 70 x 90 mm.
+    "candle": ("SCENTED CANDLE", "candleSize", 1.0),
+    "diffuser": ("REED DIFFUSER", "diffuserSize", 55 / 70),  # 55 x 70.7 mm
+}
 
-    Artboard is 70 x 90 mm at 1 unit = 1 mm. Final size must follow the
-    printer's die line for the chosen 200 ml jar.
+
+def label(product, kind="candle"):
+    """Front label concept (white paper sticker).
+
+    Candle: 70 x 90 mm for the 200 ml jar. Diffuser: the same design scaled to
+    55 x 70.7 mm for the 100 ml bottle. 1 unit = 1 mm. Final sizes must follow
+    the printer's die line for the chosen jar and bottle.
     """
+    type_line, size_key, scale = LABEL_KINDS[kind]
     W, H = 70.0, 90.0
     cx = W / 2
     color = product["colorHex"]
@@ -197,13 +206,15 @@ def label(product):
     parts.append(centred(SERIF_ITALIC, product["feeling"], 3.6, cx, y + 4, INK, max_width=56))
     parts.append(centred(SANS, " · ".join(product["notes"]).upper(), 1.85, cx, y + 11, INK, tracking=0.16, max_width=56))
 
-    parts.append(centred(SANS, "SCENTED CANDLE", 1.9, cx, H - 13, INK, tracking=0.3))
-    parts.append(centred(SANS, product["sizeLabel"].upper(), 1.9, cx, H - 9, INK, tracking=0.2))
+    parts.append(centred(SANS, type_line, 1.9, cx, H - 13, INK, tracking=0.3))
+    parts.append(centred(SANS, product[size_key].upper(), 1.9, cx, H - 9, INK, tracking=0.2))
 
-    body = "".join(parts)
+    body = f'<g transform="scale({scale:.4f})">{"".join(parts)}</g>'
+    w, h = W * scale, H * scale
+    title = f'{product["name"]} {type_line.lower()} — label concept'
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}mm" height="{H}mm" '
-        f'role="img" aria-label="{product["name"]} label concept"><title>{product["name"]} — label concept</title>{body}</svg>\n'
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w:.2f} {h:.2f}" width="{w:.2f}mm" height="{h:.2f}mm" '
+        f'role="img" aria-label="{title}"><title>{title}</title>{body}</svg>\n'
     )
 
 
@@ -211,12 +222,14 @@ def load_products():
     """Read product data from the site's single source of truth."""
     script = (
         "import('./src/data/products.js').then(m => "
-        "process.stdout.write(JSON.stringify({products: m.products, size: m.SIZE_LABEL})))"
+        "process.stdout.write(JSON.stringify({products: m.products, size: m.SIZE_LABEL, "
+        "diffuserSize: m.DIFFUSER_SIZE_LABEL})))"
     )
     out = subprocess.run(["node", "-e", script], cwd=ROOT, capture_output=True, text=True, check=True)
     data = json.loads(out.stdout)
     for p in data["products"]:
-        p["sizeLabel"] = data["size"]
+        p["candleSize"] = data["size"]
+        p["diffuserSize"] = data["diffuserSize"]
     return data["products"]
 
 
@@ -239,7 +252,8 @@ def main():
     write(os.path.join(ROOT, "src", "static", "favicon.svg"), favicon())
 
     for product in load_products():
-        write(os.path.join(OUT, "labels", f"label-{product['slug']}.svg"), label(product))
+        for kind in LABEL_KINDS:
+            write(os.path.join(OUT, "labels", f"{kind}-{product['slug']}.svg"), label(product, kind))
 
     print("Brand files written to", OUT)
 

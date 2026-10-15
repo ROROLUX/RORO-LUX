@@ -2,16 +2,44 @@
 // Edit here and every page (collection, product pages, forms, labels) updates
 // on the next build.
 //
-// `status` controls what a visitor can do:
+// Every fragrance comes in two formats: a scented candle and a reed diffuser.
+//
+// `status` (candle) and `diffuserStatus` control what a visitor can do:
 //   'waitlist'  – in development; visitors can register interest (current)
 //   'available' – on sale (requires checkout to be connected first)
 //   'sold-out'  – shown, but not purchasable
 //
-// Name colours come from the brand palette and are reserved for candle names.
-// Each passes WCAG AA contrast (4.5:1) on a white label and on the website.
+// `image` (candle) and `diffuserImage` take a photo path once photography
+// exists, e.g. '/images/safe-diffuser.jpg'. Until then an illustration is shown.
+//
+// Name colours come from the brand palette and are reserved for fragrance
+// names. Each passes WCAG AA contrast (4.5:1) on a white label and the website.
 
 export const PRICE_KES = 3000;
 export const SIZE_LABEL = '200 ml · 7.05 oz';
+
+export const DIFFUSER_PRICE_KES = 4500;
+export const DIFFUSER_SIZE_LABEL = '100 ml';
+
+// Per-format details used by product cards, pages and forms.
+export const FORMATS = {
+  candle: {
+    key: 'candle',
+    name: 'Scented candle',
+    plural: 'Scented candles',
+    price: PRICE_KES,
+    size: SIZE_LABEL,
+    base: '/collection',
+  },
+  diffuser: {
+    key: 'diffuser',
+    name: 'Reed diffuser',
+    plural: 'Reed diffusers',
+    price: DIFFUSER_PRICE_KES,
+    size: DIFFUSER_SIZE_LABEL,
+    base: '/diffusers',
+  },
+};
 
 export const products = [
   {
@@ -32,6 +60,8 @@ export const products = [
     perfectFor: ['Rainy afternoons', 'Reading', 'Resetting after a busy day'],
     status: 'waitlist',
     image: null,
+    diffuserStatus: 'waitlist',
+    diffuserImage: null,
   },
   {
     slug: 'safe',
@@ -51,6 +81,8 @@ export const products = [
     perfectFor: ['Cosy evenings', 'Hosting', 'Thoughtful gifts'],
     status: 'waitlist',
     image: null,
+    diffuserStatus: 'waitlist',
+    diffuserImage: null,
   },
   {
     slug: 'healing',
@@ -70,6 +102,8 @@ export const products = [
     perfectFor: ['Bath time', 'Reflection', 'Quiet evenings alone'],
     status: 'waitlist',
     image: null,
+    diffuserStatus: 'waitlist',
+    diffuserImage: null,
   },
   {
     slug: 'quiet-the-noise',
@@ -82,13 +116,15 @@ export const products = [
     accord: 'Lavender & chamomile · Neroli · White musk',
     notes: ['Lavender', 'Chamomile', 'Neroli', 'White musk'],
     description:
-      'Quiet the Noise opens with a soft, airy freshness before settling into lavender and chamomile. As it burns, a warm, clean musky base slowly emerges, wrapping the room in a sense of stillness.',
+      'Quiet the Noise opens with a soft, airy freshness before settling into lavender and chamomile. As the fragrance settles, a warm, clean musky base slowly emerges, wrapping the room in a sense of stillness.',
     why:
       'An evening fragrance — familiar, clean and unhurried, for the hour when the day is finally done.',
     mood: ['Calm', 'Rested', 'Clear'],
     perfectFor: ['Evenings', 'Journaling', 'Winding down'],
     status: 'waitlist',
     image: null,
+    diffuserStatus: 'waitlist',
+    diffuserImage: null,
   },
   {
     slug: 'balance',
@@ -108,11 +144,21 @@ export const products = [
     perfectFor: ['Mornings', 'Workspaces', 'Fresh starts'],
     status: 'waitlist',
     image: null,
+    diffuserStatus: 'waitlist',
+    diffuserImage: null,
   },
 ];
 
 export function productBySlug(slug) {
   return products.find((p) => p.slug === slug);
+}
+
+export function statusOf(product, format = 'candle') {
+  return format === 'diffuser' ? product.diffuserStatus : product.status;
+}
+
+export function imageOf(product, format = 'candle') {
+  return format === 'diffuser' ? product.diffuserImage : product.image;
 }
 
 export function formatPrice(amount = PRICE_KES) {

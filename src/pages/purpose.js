@@ -36,7 +36,7 @@ ${pageHero({
 <section class="section section-tight">
   <div class="container narrow prose">
     <p>We want to contribute to a culture in which people feel more comfortable acknowledging difficult emotions, talking about their experiences, and seeking appropriate support when they need it.</p>
-    <p>Our products are one part of that. Our advocacy is meant to reach further — to people who may never buy a candle, but who deserve to hear that their wellbeing matters.</p>
+    <p>Our products are one part of that. Our advocacy is meant to reach further — to people who may never buy a candle or a diffuser, but who deserve to hear that their wellbeing matters.</p>
   </div>
 </section>
 
@@ -58,11 +58,11 @@ ${pageHero({
   <div class="container split">
     <div>
       <p class="eyebrow">Our role, honestly</p>
-      <h2>What a candle can — and cannot — do.</h2>
+      <h2>What fragrance can — and cannot — do.</h2>
     </div>
     <div class="prose">
-      <p>RORO LUX is not a therapy provider, and our candles are not a treatment for depression, anxiety, trauma or any other mental-health condition. We will never present them as a substitute for professional care.</p>
-      <p>What a candle can offer is smaller and still worthwhile: a cue to pause, a fragrance that becomes part of a ritual, a way of marking time for yourself. We design for those moments — and point clearly towards real support for everything beyond them.</p>
+      <p>RORO LUX is not a therapy provider, and our candles and diffusers are not a treatment for depression, anxiety, trauma or any other mental-health condition. We will never present them as a substitute for professional care.</p>
+      <p>What fragrance can offer is smaller and still worthwhile: a cue to pause, a scent that becomes part of a ritual, a way of marking time for yourself. We design for those moments — and point clearly towards real support for everything beyond them.</p>
       <p>We will also be careful with facts. Any statistic we publish about mental health will be checked against its original source and cited, because a brand built on trust cannot afford to be careless with the truth.</p>
     </div>
   </div>
