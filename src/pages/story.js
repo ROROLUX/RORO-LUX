@@ -6,7 +6,7 @@ const values = [
   ['Quality', 'Well-balanced fragrances, safe and reliable performance, thoughtful packaging and a premium customer experience.'],
   ['Emotional awareness', 'We create space for honest conversations about the feelings people experience.'],
   ['An accessible message', 'Luxury is our product positioning, but the message that mental health matters should reach people far beyond our customers.'],
-  ['Authenticity', 'We communicate honestly about our products, our production partners, and what fragrance can and cannot do for wellbeing.'],
+  ['Authenticity', 'We communicate honestly about our products, how they are made, and what fragrance can and cannot do for wellbeing.'],
   ['Thoughtful growth', 'We build sustainably, putting customer trust and financial discipline ahead of rapid expansion.'],
 ];
 
@@ -91,9 +91,9 @@ ${pageHero({
       <h2>Honest about every step.</h2>
     </div>
     <div class="prose">
-      <p>RORO LUX works with specialist candle manufacturers and suppliers — including potential manufacturing partners in China — to produce our candles and reed diffusers, develop the fragrance profiles and customise the vessels and packaging. Our diffusers are made with essential oils, and we will publish the full formula for each one before launch.</p>
-      <p>Our own focus is fragrance selection, brand development, quality control, customer experience and mental-health advocacy. We evaluate samples before confirming any production run rather than assuming a proposed fragrance will perform as intended, and we aim to establish consistent quality before we scale.</p>
-      <p>That means RORO LUX is a fragrance and wellness brand — not a claim that every product is handmade by the founder. We think you deserve to know the difference.</p>
+      <p>Every RORO LUX candle is hand-poured in Kenya, using 100% natural soy wax with no added colour, in a clear glass jar finished with a simple white label.</p>
+      <p>We test every fragrance before it joins the collection — how it smells in the jar and while burning, how evenly the candle burns, and how the finished piece looks in a real home — and we aim to establish consistent quality before we scale. If a candle does not perform the way we intend, it does not launch.</p>
+      <p>Our reed diffusers are made with essential oils, and we will publish the full formula for each one before launch. We think you deserve to know exactly what you are bringing into your home.</p>
     </div>
   </div>
 </section>

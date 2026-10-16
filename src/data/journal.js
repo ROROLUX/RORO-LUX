@@ -11,7 +11,7 @@ export const posts = [
     body: `
 <p>Introducing RORO LUX — a home-fragrance brand inspired by emotional wellbeing, intentional living, and the quiet importance of making room for yourself.</p>
 <p>We are developing our first collection of signature fragrances, each created around a feeling and a moment worth holding on to: coming back to yourself, warmth and belonging, a slow calm, a gentle exhale at the end of a long day, and a clear, composed start to the morning.</p>
-<p>Before anything reaches you, we test it. We evaluate samples from our production partners for how each fragrance smells cold and while burning, how evenly the candle burns, and how the finished jar looks and feels in a real home. If a fragrance does not perform the way we intend, it does not launch.</p>
+<p>Every candle is hand-poured in Kenya with 100% natural soy wax. Before anything reaches you, we test it: how each fragrance smells in the jar and while burning, how evenly the candle burns, and how the finished jar looks and feels in a real home. If a fragrance does not perform the way we intend, it does not launch.</p>
 <p>This is the beginning of a journey that goes beyond candles. It is about making space for conversations around mental health, and bringing intention into the everyday.</p>
 <p>Join us as we build RORO LUX, one thoughtful detail at a time.</p>
 `,

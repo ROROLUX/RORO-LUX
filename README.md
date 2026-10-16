@@ -55,7 +55,7 @@ Empty settings in `site.config.js` (email, social links, domain) are left off th
 site automatically, and the build prints a reminder for each one.
 
 **Photography.** Until product photos exist, each candle is shown as an
-illustration of the real product (clear jar, plain white wax, white label, name in
+illustration of the real product (clear jar, white soy wax, white label, name in
 its colour), and each diffuser as an illustration of the clear bottle with reeds. To
 use a photo, put it in `src/static/images/` and set the product’s `image` (candle)
 or `diffuserImage` field, e.g. `diffuserImage: '/images/safe-diffuser.jpg'`.
@@ -157,11 +157,13 @@ converted to vector outlines: the printer needs no fonts.
 
 Before printing, check:
 
-- **Size.** 48 × 72 mm is a starting point. Ask the printer for the die line of
-  your exact 200 ml jar and change `LABEL_MM` in `source/make_candle_labels.py`.
-- **Claims.** "100% natural soy wax", "Hand poured", "Clean burning",
-  "Eco-conscious", "Made in Kenya" and the net weight must all be true of the
-  finished product. Edit them at the top of `source/make_candle_labels.py`.
+- **Size.** 48 × 72 mm for the 200 ml jar, pending final confirmation with the
+  printer. If the die line differs, change `LABEL_MM` in
+  `source/make_candle_labels.py` — the layout scales, the fonts do not change.
+- **Claims.** Confirmed: the candles are hand-poured in Kenya with 100% natural
+  soy wax. The label text is set at the top of `source/make_candle_labels.py`.
+- **Fonts.** The candle-label fonts are fixed (approved on the mockups). Do not
+  substitute them.
 - **Net weight.** Weigh the wax in a filled jar; a 200 ml jar usually holds less
   than 200 g of soy wax.
 

@@ -87,7 +87,7 @@ export default function home() {
       </div>
       <div class="pillar">
         <h3>Design</h3>
-        <p>Clear glass, plain white wax with no added colour, and a minimal white label. Understated enough to belong in any room.</p>
+        <p>Hand-poured in Kenya with 100% natural soy wax and no added colour, in clear glass with a minimal white label. Understated enough to belong in any room.</p>
       </div>
       <div class="pillar">
         <h3>Meaning</h3>
