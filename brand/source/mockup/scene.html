@@ -164,11 +164,99 @@ function makeCandle(labelUrl) {
   return g;
 }
 
+
+// ---------- Reed diffuser: 100 ml clear glass bottle, essential-oil blend, rattan reeds ----------
+const D_OUT = 2.9, D_IN = 2.68, D_BODY = 6.9, D_NECK_OUT = 0.98, D_NECK_IN = 0.76, D_SHOULDER = 8.4, D_TOP = 9.6, D_BASE = 0.5;
+function bottleProfile() {
+  const p = [];
+  const arc = (cx, cy, rx, ry, a0, a1, n) => { for (let i = 0; i <= n; i++) { const a = a0 + (a1 - a0) * i / n; p.push(new THREE.Vector2(cx + rx * Math.cos(a), cy + ry * Math.sin(a))); } };
+  p.push(new THREE.Vector2(0.001, D_BASE));
+  arc(D_IN - 0.3, D_BASE + 0.3, 0.3, 0.3, -Math.PI / 2, 0, 8);
+  p.push(new THREE.Vector2(D_IN, D_BODY));
+  arc(D_NECK_IN, D_BODY, D_IN - D_NECK_IN, D_SHOULDER - D_BODY - 0.1, 0, Math.PI / 2, 18);   // inner shoulder
+  p.push(new THREE.Vector2(D_NECK_IN, D_TOP - 0.11));
+  arc((D_NECK_IN + D_NECK_OUT) / 2, D_TOP - 0.11, (D_NECK_OUT - D_NECK_IN) / 2, 0.11, Math.PI, 0, 10); // rounded lip
+  p.push(new THREE.Vector2(D_NECK_OUT, D_SHOULDER + 0.1));
+  arc(D_NECK_OUT, D_BODY, D_OUT - D_NECK_OUT, D_SHOULDER - D_BODY + 0.1, Math.PI / 2, 0, 18); // outer shoulder
+  p.push(new THREE.Vector2(D_OUT, 0.45));
+  arc(D_OUT - 0.45, 0.45, 0.45, 0.45, 0, -Math.PI / 2, 10);
+  p.push(new THREE.Vector2(0.001, 0.0));
+  return p.reverse();
+}
+// Rendered as a tinted, glossy fill: three.js cannot refract one transmissive
+// object through another, so this is how the liquid stays visible in the glass.
+const oilMat = new THREE.MeshPhysicalMaterial({
+  color: '#EAD6A8', roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0.05,
+  emissive: new THREE.Color('#5A4320'), emissiveIntensity: 0.35, sheen: 0.4, sheenColor: new THREE.Color('#FFF3D6'),
+});
+const reedMat = new THREE.MeshStandardMaterial({ color: '#C9B28C', roughness: 0.95 });
+
+function wrapLabel(g, labelUrl, radius, LW, LH, LY) {
+  const theta = LW / radius;
+  const labelGeo = new THREE.CylinderGeometry(radius + 0.004, radius + 0.004, LH, 96, 1, true, -theta / 2, theta);
+  const tex = new THREE.TextureLoader().load(labelUrl);
+  tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const paperBump = noiseTexture(512, [128, 128, 128], 18, 11);
+  const label = new THREE.Mesh(labelGeo, new THREE.MeshPhysicalMaterial({
+    map: tex, emissiveMap: tex, emissive: new THREE.Color('#FFFFFF'), emissiveIntensity: 0.32, transparent: true, roughness: 0.82, envMapIntensity: 0.55, bumpMap: paperBump, bumpScale: 0.0015, sheen: 0.2, sheenColor: new THREE.Color('#fff'),
+  }));
+  label.position.y = LY; label.castShadow = true; g.add(label);
+  const backing = new THREE.Mesh(labelGeo, new THREE.MeshStandardMaterial({ color: '#F4F4F2', roughness: 0.9, side: THREE.BackSide, transparent: true }));
+  backing.position.y = LY; g.add(backing);
+}
+
+function contactShadow(g, radius) {
+  const cs = document.createElement('canvas'); cs.width = cs.height = 256;
+  const cg = cs.getContext('2d'); const grd = cg.createRadialGradient(128, 128, 20, 128, 128, 128);
+  grd.addColorStop(0, 'rgba(40,32,24,0.55)'); grd.addColorStop(0.55, 'rgba(40,32,24,0.18)'); grd.addColorStop(1, 'rgba(40,32,24,0)');
+  cg.fillStyle = grd; cg.fillRect(0, 0, 256, 256);
+  const contact = new THREE.Mesh(new THREE.PlaneGeometry(radius * 2.9, radius * 2.9),
+    new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cs), transparent: true, depthWrite: false }));
+  contact.rotation.x = -Math.PI / 2; contact.position.y = 0.01; g.add(contact);
+}
+
+function makeDiffuser(labelUrl, seed = 1) {
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.LatheGeometry(bottleProfile(), 160), glassMat));
+
+  // Essential-oil blend, filled to just under the shoulder.
+  const FILL = 5.4;
+  const oil = new THREE.Mesh(new THREE.CylinderGeometry(D_IN - 0.01, D_IN - 0.01, FILL - D_BASE, 120, 1), oilMat);
+  oil.position.y = D_BASE + (FILL - D_BASE) / 2; g.add(oil);
+  const surface = new THREE.Mesh(new THREE.CircleGeometry(D_IN - 0.012, 120),
+    new THREE.MeshPhysicalMaterial({ color: '#F3E4C0', roughness: 0.05, clearcoat: 1, emissive: new THREE.Color('#5A4320'), emissiveIntensity: 0.25 }));
+  surface.rotation.x = -Math.PI / 2; surface.position.y = FILL + 0.002; g.add(surface);
+
+  // Eight rattan reeds pivoting in the neck and fanning out.
+  let s = seed * 9301;
+  const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const neck = new THREE.Vector3(0, D_TOP - 0.3, 0);
+  for (let i = 0; i < 8; i++) {
+    const az = (i / 8) * Math.PI * 2 + rnd() * 0.5;
+    const tilt = 0.07 + rnd() * 0.2;
+    const dir = new THREE.Vector3(Math.sin(tilt) * Math.cos(az), Math.cos(tilt), Math.sin(tilt) * Math.sin(az));
+    const pivot = neck.clone().add(new THREE.Vector3((rnd() - 0.5) * 0.5, 0, (rnd() - 0.5) * 0.5));
+    const bottom = pivot.clone().addScaledVector(dir, -8.6);
+    const top = pivot.clone().addScaledVector(dir, 18 + rnd() * 3);
+    const len = bottom.distanceTo(top);
+    const reed = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, len, 10), reedMat);
+    reed.position.copy(bottom).add(top).multiplyScalar(0.5);
+    reed.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+    reed.castShadow = true; g.add(reed);
+  }
+
+  // 40 x 60 mm label on the straight part of the bottle.
+  wrapLabel(g, labelUrl, D_OUT, 4.0, 6.0, 3.65);
+  contactShadow(g, D_OUT);
+  return g;
+}
+
 // ---------- Layout ----------
-const spacing = 8.3;
-const CAM_Z = 66;
+const isDiffuser = labels[0].startsWith('diffuser');
+const spacing = isDiffuser ? 7.4 : 8.3;
+const CAM_Z = isDiffuser ? 92 : 66;
 labels.forEach((name, i) => {
-  const c = makeCandle(`/labels/${name}.png`);
+  const c = isDiffuser ? makeDiffuser(`/labels/${name}.png`, i + 2) : makeCandle(`/labels/${name}.png`);
   const n = labels.length;
   c.position.x = (i - (n - 1) / 2) * spacing;
   // Turn each jar so its label faces the camera, as a photographer would.
@@ -187,7 +275,10 @@ const fill = new THREE.DirectionalLight('#F3F6FF', 0.5); fill.position.set(30, 1
 scene.add(new THREE.HemisphereLight('#FFFFFF', '#D9CFC2', 0.25));
 
 const camera = new THREE.PerspectiveCamera(labels.length > 1 ? 26 : 22, W / H, 0.5, 600);
-if (labels.length > 1) { camera.position.set(0, 21, CAM_Z); camera.lookAt(0, 4.4, 0); camera.fov = 24; camera.updateProjectionMatrix(); }
+if (isDiffuser && labels.length > 1) { camera.position.set(0, 20, CAM_Z); camera.lookAt(0, 12.5, 0); camera.fov = 24; camera.updateProjectionMatrix(); }
+else if (isDiffuser && view === 'close') { camera.position.set(0, 7, 24); camera.lookAt(0, 4.6, 0); camera.fov = 26; camera.updateProjectionMatrix(); }
+else if (isDiffuser) { camera.position.set(0, 14, 76); camera.lookAt(0, 14.4, 0); camera.fov = 26; camera.updateProjectionMatrix(); }
+else if (labels.length > 1) { camera.position.set(0, 21, CAM_Z); camera.lookAt(0, 4.4, 0); camera.fov = 24; camera.updateProjectionMatrix(); }
 else if (view === 'close') { camera.position.set(0, 7.5, 21); camera.lookAt(0, 4.6, 0); camera.fov = 26; camera.updateProjectionMatrix(); }
 else { camera.position.set(0, 19, 40); camera.lookAt(0, 4.2, 0); camera.fov = 24; camera.updateProjectionMatrix(); }
 

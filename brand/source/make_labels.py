@@ -1,4 +1,4 @@
-"""Generate the RORO LUX candle jar labels (print-ready, outlined SVG).
+"""Generate the RORO LUX product labels (print-ready, outlined SVG + PDF).
 
 Layout follows the approved structural reference (brand/source/label-reference.png):
 a white sticker with a grey keyline, RORO LUX, the candle name and notes between
@@ -7,11 +7,14 @@ two rules, then the wax, features, net weight and origin lines.
 All lettering is shaped with HarfBuzz (proper kerning) and converted to vector
 outlines, so the file prints identically everywhere with no fonts installed.
 
-Outputs, per candle: brand/labels/candle-<slug>.svg and an exact-size vector
-PDF (candle-<slug>.pdf) for the printer.
+Candle and reed-diffuser labels share one design and one set of fonts; only
+the size and the lines below the notes differ (see LABELS).
+
+Outputs, per product: brand/labels/<kind>-<slug>.svg and an exact-size vector
+PDF (<kind>-<slug>.pdf) for the printer.
 
 Requirements:  pip install fonttools brotli uharfbuzz cairosvg
-Run from the repository root:  python3 brand/source/make_candle_labels.py
+Run from the repository root:  python3 brand/source/make_labels.py
 """
 
 import io
@@ -30,17 +33,30 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 FONTS = os.path.join(ROOT, "brand", "source", "fonts")
 OUT = os.path.join(ROOT, "brand", "labels")
 
-# Physical size of the sticker for the 200 ml jar: 48 x 72 mm, pending final
-# confirmation with the printer. The artboard is drawn in 1000 x 1500 units
-# (the reference's proportions) and scales to this size.
-LABEL_MM = (48.0, 72.0)
-
-# Text printed on every candle label. Confirmed by RORO LUX: hand-poured in
-# Kenya, 100% natural soy wax. The fonts below are approved — do not substitute.
-CLAIM_WAX = "100% NATURAL SOY WAX"
-FEATURES = ["Hand poured", "Clean burning", "Eco-conscious"]
-NET_WEIGHT = "NET WT: 200G / 7.05 OZ"
-ORIGIN = "MADE IN KENYA"
+# What each label says below the notes, and its physical size. The artboard
+# is drawn in 1000 x 1500 units (the reference's proportions) and scales to
+# `size_mm`; the fonts below are approved and must not be substituted.
+LABELS = {
+    # 200 ml jar: 48 x 72 mm, pending final confirmation with the printer.
+    # Confirmed by RORO LUX: hand-poured in Kenya, 100% natural soy wax.
+    "candle": {
+        "size_mm": (48.0, 72.0),
+        "claim": "100% NATURAL SOY WAX",
+        "features": ["Hand poured", "Clean burning", "Eco-conscious"],
+        "quantity": "NET WT: 200G / 7.05 OZ",
+        "footer": "MADE IN KENYA",
+    },
+    # 100 ml bottle: 40 x 60 mm (same proportions), pending the bottle's die
+    # line. Only claims already made on the website are used; where the
+    # diffusers are made is not yet confirmed, so no origin line is printed.
+    "diffuser": {
+        "size_mm": (40.0, 60.0),
+        "claim": "MADE WITH ESSENTIAL OILS",
+        "features": ["Flame-free", "Reeds included", "Eco-conscious"],
+        "quantity": "100 ML / 3.4 FL OZ",
+        "footer": "REED DIFFUSER",
+    },
+}
 
 INK = "#0B0B0B"
 SOFT_INK = "#202020"
@@ -141,7 +157,8 @@ def ink_top_for(style, reference_text, reference_top, text):
     return reference_top - ref_b[1] + b[1]
 
 
-def label_svg(product):
+def label_svg(product, kind="candle"):
+    cfg = LABELS[kind]
     W, H = 1000, 1500
     parts = [
         f'<rect width="{W}" height="{H}" fill="#FFFFFF"/>',
@@ -153,26 +170,28 @@ def label_svg(product):
         centred_text(NOTES_STYLE, product["labelNotes"],
                      ink_top_for(NOTES_STYLE, "Rain, Moss & White Musk", 635, product["labelNotes"]), NOTES_BROWN),
         f'<rect x="{CENTRE_X - 236}" y="719" width="472" height="4" fill="{RULE_GREY}"/>',
-        centred_text(WAX_STYLE, CLAIM_WAX, 829, SOFT_INK),
+        centred_text(WAX_STYLE, cfg["claim"], 829, SOFT_INK),
     ]
 
     # Three features, evenly spaced around the centre line.
     font, size, tracking = FEATURE_STYLE
-    widths = [font.layout(t, size, tracking)[1] for t in FEATURES]
+    features = cfg["features"]
+    widths = [font.layout(t, size, tracking)[1] for t in features]
     widths = [b[2] - b[0] for b in widths]
     gap = 48
-    total = sum(widths) + gap * (len(FEATURES) - 1)
+    total = sum(widths) + gap * (len(features) - 1)
     x = CENTRE_X - total / 2
-    for text, w in zip(FEATURES, widths):
+    for text, w in zip(features, widths):
         top = ink_top_for(FEATURE_STYLE, "Hand poured", 933, text)
         parts.append(centred_text(FEATURE_STYLE, text, top, SOFT_INK, centre=x + w / 2))
         x += w + gap
 
-    parts.append(centred_text(NET_STYLE, NET_WEIGHT, ink_top_for(NET_STYLE, "NET WT: 200G / 7.05 OZ", 1114, NET_WEIGHT), SOFT_INK))
-    parts.append(centred_text(ORIGIN_STYLE, ORIGIN, 1204, SOFT_INK))
+    quantity = cfg["quantity"]
+    parts.append(centred_text(NET_STYLE, quantity, ink_top_for(NET_STYLE, "NET WT: 200G / 7.05 OZ", 1114, quantity), SOFT_INK))
+    parts.append(centred_text(ORIGIN_STYLE, cfg["footer"], 1204, SOFT_INK))
 
-    w_mm, h_mm = LABEL_MM
-    title = f'{product["name"]} — candle label'
+    w_mm, h_mm = cfg["size_mm"]
+    title = f'{product["name"]} — {kind} label'
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{w_mm}mm" height="{h_mm}mm" '
         f'role="img" aria-label="{title}"><title>{title}</title>{"".join(parts)}</svg>\n'
@@ -188,11 +207,12 @@ def load_products():
 def main():
     os.makedirs(OUT, exist_ok=True)
     for product in load_products():
-        path = os.path.join(OUT, f"candle-{product['slug']}.svg")
-        with open(path, "w", encoding="utf-8") as fh:
-            fh.write(label_svg(product))
-        cairosvg.svg2pdf(url=path, write_to=path[:-4] + ".pdf")
-    print("Candle labels written to", OUT)
+        for kind in LABELS:
+            path = os.path.join(OUT, f"{kind}-{product['slug']}.svg")
+            with open(path, "w", encoding="utf-8") as fh:
+                fh.write(label_svg(product, kind))
+            cairosvg.svg2pdf(url=path, write_to=path[:-4] + ".pdf")
+    print("Candle and diffuser labels written to", OUT)
 
 
 if __name__ == "__main__":

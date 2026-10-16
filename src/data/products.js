@@ -11,8 +11,10 @@
 //
 // `labelNotes` is the short notes line printed on the jar label.
 //
-// `image` (candle) and `diffuserImage` take a photo path once photography
-// exists, e.g. '/images/safe-diffuser.jpg'. Until then an illustration is shown.
+// `image` (candle) and `diffuserImage` point to product pictures in
+// src/static/images. They are currently 3D renders of the real labels on the
+// real formats; replace them with photography when it exists. Set either to
+// null to fall back to the built-in illustration.
 //
 // Name colours come from the brand palette and are reserved for fragrance
 // names. Each passes WCAG AA contrast (4.5:1) on a white label and the website.
@@ -62,9 +64,9 @@ export const products = [
     mood: ['Grounded', 'Fresh', 'Present'],
     perfectFor: ['Rainy afternoons', 'Reading', 'Resetting after a busy day'],
     status: 'waitlist',
-    image: null,
+    image: '/images/candle-stay-grounded.jpg',
     diffuserStatus: 'waitlist',
-    diffuserImage: null,
+    diffuserImage: '/images/diffuser-stay-grounded.jpg',
   },
   {
     slug: 'safe',
@@ -84,9 +86,9 @@ export const products = [
     mood: ['Warm', 'Comforted', 'At home'],
     perfectFor: ['Cosy evenings', 'Hosting', 'Thoughtful gifts'],
     status: 'waitlist',
-    image: null,
+    image: '/images/candle-safe.jpg',
     diffuserStatus: 'waitlist',
-    diffuserImage: null,
+    diffuserImage: '/images/diffuser-safe.jpg',
   },
   {
     slug: 'healing',
@@ -106,9 +108,9 @@ export const products = [
     mood: ['Restored', 'Soft', 'Present'],
     perfectFor: ['Bath time', 'Reflection', 'Quiet evenings alone'],
     status: 'waitlist',
-    image: null,
+    image: '/images/candle-healing.jpg',
     diffuserStatus: 'waitlist',
-    diffuserImage: null,
+    diffuserImage: '/images/diffuser-healing.jpg',
   },
   {
     slug: 'quiet-the-noise',
@@ -128,9 +130,9 @@ export const products = [
     mood: ['Calm', 'Rested', 'Clear'],
     perfectFor: ['Evenings', 'Journaling', 'Winding down'],
     status: 'waitlist',
-    image: null,
+    image: '/images/candle-quiet-the-noise.jpg',
     diffuserStatus: 'waitlist',
-    diffuserImage: null,
+    diffuserImage: '/images/diffuser-quiet-the-noise.jpg',
   },
   {
     slug: 'balance',
@@ -150,9 +152,9 @@ export const products = [
     mood: ['Focused', 'Clear', 'Centred'],
     perfectFor: ['Mornings', 'Workspaces', 'Fresh starts'],
     status: 'waitlist',
-    image: null,
+    image: '/images/candle-balance.jpg',
     diffuserStatus: 'waitlist',
-    diffuserImage: null,
+    diffuserImage: '/images/diffuser-balance.jpg',
   },
 ];
 

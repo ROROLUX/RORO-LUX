@@ -148,7 +148,7 @@ function footer() {
  */
 export function candleArt(product, { size = 'md', lit = false } = {}) {
   if (product.image) {
-    return `<img class="candle-photo" src="${esc(product.image)}" alt="${esc(product.name)} scented candle in a clear glass jar" loading="lazy">`;
+    return productPhoto(product.image, `${product.name} scented candle in a clear glass jar`, size);
   }
   const id = `c-${product.slug}-${size}`;
   const nameLines = product.name.length > 10 ? splitName(product.name) : [product.name];
@@ -203,6 +203,12 @@ export function candleArt(product, { size = 'md', lit = false } = {}) {
 </svg>`;
 }
 
+/** A 4:5 product picture; the large hero and detail images load immediately. */
+function productPhoto(src, alt, size) {
+  const eager = size === 'hero' || size === 'detail';
+  return `<img class="candle-photo" src="${esc(src)}" alt="${esc(alt)}" width="1000" height="1250"${eager ? '' : ' loading="lazy"'}>`;
+}
+
 function splitName(name) {
   const words = name.split(' ');
   return [words.slice(0, -1).join(' '), words[words.length - 1]];
@@ -215,7 +221,7 @@ function splitName(name) {
  */
 export function diffuserArt(product, { size = 'md' } = {}) {
   if (product.diffuserImage) {
-    return `<img class="candle-photo" src="${esc(product.diffuserImage)}" alt="${esc(product.name)} reed diffuser in a clear glass bottle" loading="lazy">`;
+    return productPhoto(product.diffuserImage, `${product.name} reed diffuser in a clear glass bottle`, size);
   }
   const id = `d-${product.slug}-${size}`;
   const nameLines = product.name.length > 10 ? splitName(product.name) : [product.name];

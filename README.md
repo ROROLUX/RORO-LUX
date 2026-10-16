@@ -54,12 +54,11 @@ on every deploy.
 Empty settings in `site.config.js` (email, social links, domain) are left off the
 site automatically, and the build prints a reminder for each one.
 
-**Photography.** Until product photos exist, each candle is shown as an
-illustration of the real product (clear jar, white soy wax, white label, name in
-its colour), and each diffuser as an illustration of the clear bottle with reeds. To
-use a photo, put it in `src/static/images/` and set the product’s `image` (candle)
-or `diffuserImage` field, e.g. `diffuserImage: '/images/safe-diffuser.jpg'`.
-Portrait 4:5 works best.
+**Product pictures.** Each candle and diffuser is shown with a 3D render of the
+real label on the real format (`src/static/images/`, 1000 × 1250 px). When product
+photography exists, replace those files, or point the product's `image` (candle)
+or `diffuserImage` field in `src/data/products.js` at new ones. Portrait 4:5
+works best. Setting a field to `null` falls back to a built-in illustration.
 
 ## Running it locally
 
@@ -143,42 +142,49 @@ files print identically on any machine.
 | `roro-lux-monogram.svg` | RL seal for lids, boxes, social avatars |
 | `*-white.svg` | White versions for dark backgrounds |
 | `labels/candle-*.pdf` | **Print-ready candle labels**, 48 × 72 mm, vector, one per fragrance |
-| `labels/candle-*.svg` | The same candle labels as editable SVG |
-| `labels/diffuser-*.svg` | Bottle-label concepts, 55 × 71 mm, one per fragrance (earlier style) |
-| `mockups/mockup-*.jpg` | Photorealistic 3D renders of each candle, a close-up and the collection |
+| `labels/diffuser-*.pdf` | **Print-ready diffuser labels**, 40 × 60 mm, vector, one per fragrance |
+| `labels/*.svg` | The same labels as editable SVG |
+| `mockups/mockup-*.jpg` | 3D renders of each candle, a close-up and the candle collection |
+| `mockups/mockup-diffuser-*.jpg` | 3D renders of each diffuser, a close-up and the diffuser collection |
 
-### Candle labels
+### Labels
 
-The candle labels follow the approved layout in `source/label-reference.png`.
-They use Cormorant Garamond (RORO LUX), Kurale (candle name and notes),
+Candle and diffuser labels share one design, from the approved layout in
+`source/label-reference.png`. They use Cormorant Garamond (RORO LUX), Kurale (name and notes),
 Montserrat (small capitals) and Source Serif 4 (the three features) — all SIL
 Open Font License, so they may be printed commercially. Every letter is
 converted to vector outlines: the printer needs no fonts.
 
 Before printing, check:
 
-- **Size.** 48 × 72 mm for the 200 ml jar, pending final confirmation with the
-  printer. If the die line differs, change `LABEL_MM` in
-  `source/make_candle_labels.py` — the layout scales, the fonts do not change.
-- **Claims.** Confirmed: the candles are hand-poured in Kenya with 100% natural
-  soy wax. The label text is set at the top of `source/make_candle_labels.py`.
-- **Fonts.** The candle-label fonts are fixed (approved on the mockups). Do not
+- **Size.** Candle: 48 × 72 mm for the 200 ml jar. Diffuser: 40 × 60 mm for the
+  100 ml bottle. Both pending the printer's die lines. Change `size_mm` in
+  `LABELS` (top of `source/make_labels.py`) — the layout scales, the fonts do
+  not change.
+- **Claims.** Candles (confirmed): hand-poured in Kenya, 100% natural soy wax.
+  Diffusers: "Made with essential oils", "Flame-free", "Reeds included",
+  "Eco-conscious", "100 ml / 3.4 fl oz", "Reed diffuser". There is no "Made in
+  Kenya" line on the diffuser until where they are made is confirmed. All
+  label text is in `LABELS`.
+- **Fonts.** The label fonts are fixed (approved on the mockups). Do not
   substitute them.
+- **Small text on diffusers.** At 40 × 60 mm the feature words print at about
+  4 pt. Ask the printer for a proof to confirm they read clearly.
 - **Net weight.** Weigh the wax in a filled jar; a 200 ml jar usually holds less
   than 200 g of soy wax.
 
 Regenerate after any change:
-`pip install fonttools brotli uharfbuzz cairosvg && python3 brand/source/make_candle_labels.py`
+`pip install fonttools brotli uharfbuzz cairosvg && python3 brand/source/make_labels.py`
 
-The diffuser label concepts must be resized to your printer's die line once the
-100 ml bottle is confirmed. Regenerate them with
+The logo, monogram and favicon are regenerated with
 `pip install fonttools brotli && npm run brand`.
 
 ### Mockups
 
-`mockups/` holds 3D renders of the candles, built from the real label files
-on a modelled clear 200 ml glass jar (72 mm × 86 mm) with white soy wax and a
-cotton wick. They are renders, not photographs; replace them with product
+`mockups/` holds 3D renders built from the real label files: candles on a
+modelled clear 200 ml glass jar (72 mm × 86 mm) with white soy wax and a cotton
+wick; diffusers on a clear 100 ml bottle (58 mm wide) with an essential-oil fill
+and eight rattan reeds. They are renders, not photographs; replace them with product
 photography once production samples exist. The scene is in
 `source/mockup/scene.html` (three.js).
 

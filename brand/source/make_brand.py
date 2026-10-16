@@ -1,4 +1,6 @@
-"""Generate the RORO LUX logo files and jar-label concepts as outlined SVG.
+"""Generate the RORO LUX logo, monogram and favicon files as outlined SVG.
+
+Product labels are generated separately by make_labels.py.
 
 All lettering is converted to vector paths, so the files print identically on
 any machine (no font installation needed at the printer).
@@ -7,9 +9,7 @@ Requirements:  pip install fonttools brotli
 Run from the roro-lux/ folder:  python3 brand/source/make_brand.py
 """
 
-import json
 import os
-import subprocess
 
 from fontTools.pens.boundsPen import BoundsPen
 from fontTools.pens.svgPathPen import SVGPathPen
@@ -165,74 +165,6 @@ def favicon():
     return svg(S, S, "".join(parts), "RORO LUX")
 
 
-LABEL_KINDS = {
-    # kind: (product type line, size key, scale). Scale 1 = 70 x 90 mm.
-    # Candle labels now come from make_candle_labels.py (the approved layout).
-    "diffuser": ("REED DIFFUSER", "diffuserSize", 55 / 70),  # 55 x 70.7 mm
-}
-
-
-def label(product, kind="candle"):
-    """Front label concept (white paper sticker).
-
-    Candle: 70 x 90 mm for the 200 ml jar. Diffuser: the same design scaled to
-    55 x 70.7 mm for the 100 ml bottle. 1 unit = 1 mm. Final sizes must follow
-    the printer's die line for the chosen jar and bottle.
-    """
-    type_line, size_key, scale = LABEL_KINDS[kind]
-    W, H = 70.0, 90.0
-    cx = W / 2
-    color = product["colorHex"]
-    parts = [
-        f'<rect x="0.25" y="0.25" width="{W - 0.5}" height="{H - 0.5}" rx="3" fill="#FFFFFF" stroke="#D9D6D1" stroke-width="0.25"/>'
-    ]
-    parts.append(flame(cx, 15.5, 8, stroke=0.28, color=INK))
-
-    d, w, b = text_path(SERIF_LIGHT, "RORO LUX", 5.6, tracking=0.30)
-    parts.append(placed(d, cx - (b[2] - b[0]) / 2 - b[0], 24, INK))
-
-    # Candle name in its own colour — the only colour on the label.
-    name = product["name"].upper()
-    words = name.split(" ")
-    lines = [name] if len(name) <= 10 else [" ".join(words[:-1]), words[-1]]
-    y = 43 if len(lines) == 1 else 39
-    for line in lines:
-        d, w, b = text_path(SERIF_REGULAR, line, 7.4, tracking=0.12)
-        parts.append(placed(d, cx - (b[2] - b[0]) / 2 - b[0], y, color))
-        y += 8.6
-
-    parts.append(f'<path d="M{cx - 4},{y - 2.5} L{cx + 4},{y - 2.5}" stroke="{INK}" stroke-width="0.2"/>')
-
-    parts.append(centred(SERIF_ITALIC, product["feeling"], 3.6, cx, y + 4, INK, max_width=56))
-    parts.append(centred(SANS, " · ".join(product["notes"]).upper(), 1.85, cx, y + 11, INK, tracking=0.16, max_width=56))
-
-    parts.append(centred(SANS, type_line, 1.9, cx, H - 13, INK, tracking=0.3))
-    parts.append(centred(SANS, product[size_key].upper(), 1.9, cx, H - 9, INK, tracking=0.2))
-
-    body = f'<g transform="scale({scale:.4f})">{"".join(parts)}</g>'
-    w, h = W * scale, H * scale
-    title = f'{product["name"]} {type_line.lower()} — label concept'
-    return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w:.2f} {h:.2f}" width="{w:.2f}mm" height="{h:.2f}mm" '
-        f'role="img" aria-label="{title}"><title>{title}</title>{body}</svg>\n'
-    )
-
-
-def load_products():
-    """Read product data from the site's single source of truth."""
-    script = (
-        "import('./src/data/products.js').then(m => "
-        "process.stdout.write(JSON.stringify({products: m.products, size: m.SIZE_LABEL, "
-        "diffuserSize: m.DIFFUSER_SIZE_LABEL})))"
-    )
-    out = subprocess.run(["node", "-e", script], cwd=ROOT, capture_output=True, text=True, check=True)
-    data = json.loads(out.stdout)
-    for p in data["products"]:
-        p["candleSize"] = data["size"]
-        p["diffuserSize"] = data["diffuserSize"]
-    return data["products"]
-
-
 def main():
     files = {
         "roro-lux-logo.svg": primary_logo(),
@@ -250,10 +182,6 @@ def main():
     write(os.path.join(SITE_BRAND, "logo-horizontal.svg"), horizontal_logo())
     write(os.path.join(SITE_BRAND, "monogram.svg"), monogram())
     write(os.path.join(ROOT, "src", "static", "favicon.svg"), favicon())
-
-    for product in load_products():
-        for kind in LABEL_KINDS:
-            write(os.path.join(OUT, "labels", f"{kind}-{product['slug']}.svg"), label(product, kind))
 
     print("Brand files written to", OUT)
 
