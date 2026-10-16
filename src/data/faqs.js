@@ -43,11 +43,11 @@ export const faqs = [
     items: [
       {
         q: 'Are the diffusers made with essential oils?',
-        a: 'Yes. Our reed diffusers are made with essential oils. A few of the notes in our collection — rain, petrichor, white musk and lily of the valley — have no natural essential-oil equivalent, so we are confirming with our fragrance partner how each of these is expressed. Before launch we will publish the full formula for every diffuser, so you know exactly what is in the bottle.',
+        a: 'Yes. Our reed diffusers are made with essential oils. A few of the notes in our collection — rain, petrichor, white musk and lily of the valley — have no natural essential-oil equivalent, so we are confirming how each of these is expressed. Before launch we will publish the full formula for every diffuser, so you know exactly what is in the bottle.',
       },
       {
         q: 'Are the candles also made with essential oils?',
-        a: 'Our essential-oil commitment applies to the reed diffusers. The candles use fragrance blends developed and tested with our production partner, and their full specifications will be published on each product page before launch.',
+        a: 'Our essential-oil commitment applies to the reed diffusers. The candles are hand-poured with 100% natural soy wax and scented with fragrance blends we select and test ourselves. Their full fragrance and wick specifications will be published on each product page before launch.',
       },
       {
         q: 'How long will a diffuser last?',
@@ -68,11 +68,11 @@ export const faqs = [
     items: [
       {
         q: 'What are the candles made of?',
-        a: 'Each candle is plain white wax with no added colour, in a clear glass jar with a white paper label. We are confirming the final wax blend, wick and fragrance specifications with our production partner during sampling, and will publish them on each product page before launch.',
+        a: 'Each candle is 100% natural soy wax with no added colour, hand-poured into a clear 200 ml glass jar and finished with a white paper label. We will publish the full wick and fragrance specifications on each product page before launch.',
       },
       {
-        q: 'Who makes the candles?',
-        a: 'We work with specialist candle manufacturers and suppliers to produce our candles, develop the fragrance profiles and customise the vessels and packaging. RORO LUX selects every fragrance, evaluates every sample and is responsible for quality control. Our candles are not handmade by the founder, and we will always be open about how they are made.',
+        q: 'Where are the candles made?',
+        a: 'Our candles are hand-poured in Kenya. RORO LUX selects every fragrance, tests every candle and is responsible for quality control from the first pour to the finished jar.',
       },
       {
         q: 'How long will a candle burn?',

@@ -9,7 +9,7 @@ export function collection() {
 ${pageHero({
   eyebrow: 'Scented candles',
   title: 'Five fragrances, each with a feeling.',
-  lede: 'Our first collection of scented candles. Plain white wax, a clear 200 ml glass jar and a white label carrying the name of the feeling behind it.',
+  lede: 'Our first collection of scented candles, hand-poured in Kenya. 100% natural soy wax, a clear 200 ml glass jar and a white label carrying the name of the feeling behind it.',
 })}
 <section class="section section-tight">
   <div class="container">
@@ -105,7 +105,7 @@ function formatCrossSell(format) {
       : {
           eyebrow: 'Also in the collection',
           title: 'Every fragrance, also as a scented candle.',
-          text: `Plain white wax in a clear ${f.size} glass jar. ${formatPrice(f.price)}.`,
+          text: `Hand-poured 100% natural soy wax in a clear ${f.size} glass jar. ${formatPrice(f.price)}.`,
           cta: 'Explore the candles',
         };
   return `<section class="section section-soft crosssell">
@@ -137,7 +137,8 @@ function formatPage(product, format) {
         <div><dt>Blend</dt><dd>Made with essential oils</dd></div>
         <div><dt>Reeds</dt><dd>Included</dd></div>`
     : `<div><dt>Vessel</dt><dd>Clear glass jar, ${f.size}</dd></div>
-        <div><dt>Wax</dt><dd>Plain white, no added colour</dd></div>`;
+        <div><dt>Wax</dt><dd>100% natural soy wax, no added colour</dd></div>
+        <div><dt>Made</dt><dd>Hand-poured in Kenya</dd></div>`;
 
   const care = isDiffuser
     ? `<p>Remove the stopper, place the reeds in the bottle and turn them once after an hour so both ends are saturated. Turn the reeds about once a week to refresh the fragrance. Keep out of reach of children and pets, away from heat and open flames, and on a surface protected from drips — essential oils can mark polished wood and painted finishes. <a href="/journal/reed-diffuser-care">Full care guide</a>.</p>`
@@ -145,7 +146,7 @@ function formatPage(product, format) {
 
   const ingredients = isDiffuser
     ? `<p>Our reed diffusers are made with essential oils. Some of the notes in this collection — such as rain, petrichor, white musk and lily of the valley — have no natural essential-oil equivalent, so we are confirming with our fragrance partner how each is expressed. The full formula and a tested lasting time will be published here before launch.</p>`
-    : `<p>We are confirming the final wax blend, wick and fragrance specifications with our production partner during sampling. Full ingredients and a tested burn time will be published here before launch.</p>`;
+    : `<p>100% natural soy wax, hand-poured in Kenya. The full wick and fragrance specifications and a tested burn time will be published here before launch.</p>`;
 
   const body = `
 <nav class="breadcrumb container" aria-label="Breadcrumb"><a href="${f.base}">${f.plural}</a><span aria-hidden="true">/</span><span>${esc(product.name)}</span></nav>

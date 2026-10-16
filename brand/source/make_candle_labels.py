@@ -30,12 +30,13 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 FONTS = os.path.join(ROOT, "brand", "source", "fonts")
 OUT = os.path.join(ROOT, "brand", "labels")
 
-# Physical size of the sticker. The artboard is drawn in 1000 x 1500 units
-# (the reference's proportions) and scaled to this size. Adjust to the
-# printer's die line once the exact 200 ml jar is confirmed.
+# Physical size of the sticker for the 200 ml jar: 48 x 72 mm, pending final
+# confirmation with the printer. The artboard is drawn in 1000 x 1500 units
+# (the reference's proportions) and scales to this size.
 LABEL_MM = (48.0, 72.0)
 
-# Text printed on every candle label. Review before printing (see README).
+# Text printed on every candle label. Confirmed by RORO LUX: hand-poured in
+# Kenya, 100% natural soy wax. The fonts below are approved — do not substitute.
 CLAIM_WAX = "100% NATURAL SOY WAX"
 FEATURES = ["Hand poured", "Clean burning", "Eco-conscious"]
 NET_WEIGHT = "NET WT: 200G / 7.05 OZ"
