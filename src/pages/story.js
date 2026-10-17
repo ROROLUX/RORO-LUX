@@ -93,7 +93,7 @@ ${pageHero({
     <div class="prose">
       <p>Every RORO LUX candle is hand-poured in Kenya, using 100% natural soy wax with no added colour, in a clear glass jar finished with a simple white label.</p>
       <p>We test every fragrance before it joins the collection — how it smells in the jar and while burning, how evenly the candle burns, and how the finished piece looks in a real home — and we aim to establish consistent quality before we scale. If a candle does not perform the way we intend, it does not launch.</p>
-      <p>Our reed diffusers are made with essential oils, and we will publish the full formula for each one before launch. We think you deserve to know exactly what you are bringing into your home.</p>
+      <p>Our reed diffusers are also made in Kenya, with essential oils, and we will publish the full formula for each one before launch. We think you deserve to know exactly what you are bringing into your home.</p>
     </div>
   </div>
 </section>

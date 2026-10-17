@@ -71,8 +71,8 @@ export const faqs = [
         a: 'Each candle is 100% natural soy wax with no added colour, hand-poured into a clear 200 ml glass jar and finished with a white paper label. We will publish the full wick and fragrance specifications on each product page before launch.',
       },
       {
-        q: 'Where are the candles made?',
-        a: 'Our candles are hand-poured in Kenya. RORO LUX selects every fragrance, tests every candle and is responsible for quality control from the first pour to the finished jar.',
+        q: 'Where are your products made?',
+        a: 'In Kenya. Our candles are hand-poured in Kenya, and our reed diffusers are made in Kenya too. RORO LUX selects every fragrance, tests every product and is responsible for quality control from start to finish.',
       },
       {
         q: 'How long will a candle burn?',

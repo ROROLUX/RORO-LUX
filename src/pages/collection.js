@@ -72,6 +72,7 @@ ${pageHero({
     <dl class="product-specs">
       <div><dt>Blend</dt><dd>Made with essential oils. The full formula for each fragrance will be published on its page before launch.</dd></div>
       <div><dt>Bottle</dt><dd>Clear glass, ${DIFFUSER.size}, with a white paper label</dd></div>
+      <div><dt>Made</dt><dd>Made in Kenya</dd></div>
       <div><dt>Reeds</dt><dd>Included</dd></div>
       <div><dt>How long it lasts</dt><dd>We will publish a tested figure once production samples are approved</dd></div>
     </dl>
@@ -135,7 +136,8 @@ function formatPage(product, format) {
   const specs = isDiffuser
     ? `<div><dt>Bottle</dt><dd>Clear glass bottle, ${f.size}</dd></div>
         <div><dt>Blend</dt><dd>Made with essential oils</dd></div>
-        <div><dt>Reeds</dt><dd>Included</dd></div>`
+        <div><dt>Reeds</dt><dd>Included</dd></div>
+        <div><dt>Made</dt><dd>Made in Kenya</dd></div>`
     : `<div><dt>Vessel</dt><dd>Clear glass jar, ${f.size}</dd></div>
         <div><dt>Wax</dt><dd>100% natural soy wax, no added colour</dd></div>
         <div><dt>Made</dt><dd>Hand-poured in Kenya</dd></div>`;
@@ -145,7 +147,7 @@ function formatPage(product, format) {
     : `<p>Let the first burn reach the edges of the jar. Trim the wick to about 5 mm before each use, burn for no more than four hours at a time, and never leave a lit candle unattended. <a href="/journal/candle-care">Full care guide</a>.</p>`;
 
   const ingredients = isDiffuser
-    ? `<p>Our reed diffusers are made with essential oils. Some of the notes in this collection — such as rain, petrichor, white musk and lily of the valley — have no natural essential-oil equivalent, so we are confirming with our fragrance partner how each is expressed. The full formula and a tested lasting time will be published here before launch.</p>`
+    ? `<p>Our reed diffusers are made with essential oils. Some of the notes in this collection — such as rain, petrichor, white musk and lily of the valley — have no natural essential-oil equivalent, so we are confirming how each is expressed. The full formula and a tested lasting time will be published here before launch.</p>`
     : `<p>100% natural soy wax, hand-poured in Kenya. The full wick and fragrance specifications and a tested burn time will be published here before launch.</p>`;
 
   const body = `

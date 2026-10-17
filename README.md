@@ -157,15 +157,14 @@ converted to vector outlines: the printer needs no fonts.
 
 Before printing, check:
 
-- **Size.** Candle: 48 × 72 mm for the 200 ml jar. Diffuser: 48 × 72 mm for the
-  200 ml bottle. Both pending the printer's die lines. Change `size_mm` in
+- **Size.** 48 × 72 mm for both the 200 ml candle jar and the 200 ml diffuser
+  bottle (confirmed with the printer for the bottle). Change `size_mm` in
   `LABELS` (top of `source/make_labels.py`) — the layout scales, the fonts do
   not change.
 - **Claims.** Candles (confirmed): hand-poured in Kenya, 100% natural soy wax.
-  Diffusers: "Made with essential oils", "Flame-free", "Reeds included",
-  "Eco-conscious", "200 ml / 6.8 fl oz", "Reed diffuser". There is no "Made in
-  Kenya" line on the diffuser until where they are made is confirmed. All
-  label text is in `LABELS`.
+  Diffusers (confirmed): made in Kenya, made with essential oils; "Reed
+  diffuser", "Flame-free", "Reeds included", "200 ml / 6.8 fl oz". Diffusers
+  are deliberately not labelled "Eco-conscious". All label text is in `LABELS`.
 - **Fonts.** The label fonts are fixed (approved on the mockups). Do not
   substitute them.
 - **Net weight.** Weigh the wax in a filled jar; a 200 ml jar usually holds less

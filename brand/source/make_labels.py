@@ -37,7 +37,7 @@ OUT = os.path.join(ROOT, "brand", "labels")
 # is drawn in 1000 x 1500 units (the reference's proportions) and scales to
 # `size_mm`; the fonts below are approved and must not be substituted.
 LABELS = {
-    # 200 ml jar: 48 x 72 mm, pending final confirmation with the printer.
+    # 200 ml jar: 48 x 72 mm.
     # Confirmed by RORO LUX: hand-poured in Kenya, 100% natural soy wax.
     "candle": {
         "size_mm": (48.0, 72.0),
@@ -46,15 +46,14 @@ LABELS = {
         "quantity": "NET WT: 200G / 7.05 OZ",
         "footer": "MADE IN KENYA",
     },
-    # 200 ml bottle: 48 x 72 mm (same as the candle), pending the bottle's die
-    # line. Only claims already made on the website are used; where the
-    # diffusers are made is not yet confirmed, so no origin line is printed.
+    # 200 ml bottle: 48 x 72 mm, confirmed with the printer.
+    # Confirmed by RORO LUX: made in Kenya; not described as eco-conscious.
     "diffuser": {
         "size_mm": (48.0, 72.0),
         "claim": "MADE WITH ESSENTIAL OILS",
-        "features": ["Flame-free", "Reeds included", "Eco-conscious"],
+        "features": ["Reed diffuser", "Flame-free", "Reeds included"],
         "quantity": "200 ML / 6.8 FL OZ",
-        "footer": "REED DIFFUSER",
+        "footer": "MADE IN KENYA",
     },
 }
 
