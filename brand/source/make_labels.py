@@ -46,14 +46,14 @@ LABELS = {
         "quantity": "NET WT: 200G / 7.05 OZ",
         "footer": "MADE IN KENYA",
     },
-    # 100 ml bottle: 40 x 60 mm (same proportions), pending the bottle's die
+    # 200 ml bottle: 48 x 72 mm (same as the candle), pending the bottle's die
     # line. Only claims already made on the website are used; where the
     # diffusers are made is not yet confirmed, so no origin line is printed.
     "diffuser": {
-        "size_mm": (40.0, 60.0),
+        "size_mm": (48.0, 72.0),
         "claim": "MADE WITH ESSENTIAL OILS",
         "features": ["Flame-free", "Reeds included", "Eco-conscious"],
-        "quantity": "100 ML / 3.4 FL OZ",
+        "quantity": "200 ML / 6.8 FL OZ",
         "footer": "REED DIFFUSER",
     },
 }

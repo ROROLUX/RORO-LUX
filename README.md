@@ -25,7 +25,7 @@ Every fragrance comes in two formats:
 | Format | Size | Price |
 | --- | --- | --- |
 | Scented candle | 200 ml clear glass jar | KSh 3,000 |
-| Reed diffuser (made with essential oils) | 100 ml clear glass bottle, reeds included | KSh 4,500 |
+| Reed diffuser (made with essential oils) | 200 ml clear glass bottle, reeds included | KSh 4,500 |
 
 Every product is marked **In development — join the waitlist**. The waitlist
 asks visitors which fragrance and which format they are most drawn to, which
@@ -142,7 +142,7 @@ files print identically on any machine.
 | `roro-lux-monogram.svg` | RL seal for lids, boxes, social avatars |
 | `*-white.svg` | White versions for dark backgrounds |
 | `labels/candle-*.pdf` | **Print-ready candle labels**, 48 × 72 mm, vector, one per fragrance |
-| `labels/diffuser-*.pdf` | **Print-ready diffuser labels**, 40 × 60 mm, vector, one per fragrance |
+| `labels/diffuser-*.pdf` | **Print-ready diffuser labels**, 48 × 72 mm, vector, one per fragrance |
 | `labels/*.svg` | The same labels as editable SVG |
 | `mockups/mockup-*.jpg` | 3D renders of each candle, a close-up and the candle collection |
 | `mockups/mockup-diffuser-*.jpg` | 3D renders of each diffuser, a close-up and the diffuser collection |
@@ -157,19 +157,17 @@ converted to vector outlines: the printer needs no fonts.
 
 Before printing, check:
 
-- **Size.** Candle: 48 × 72 mm for the 200 ml jar. Diffuser: 40 × 60 mm for the
-  100 ml bottle. Both pending the printer's die lines. Change `size_mm` in
+- **Size.** Candle: 48 × 72 mm for the 200 ml jar. Diffuser: 48 × 72 mm for the
+  200 ml bottle. Both pending the printer's die lines. Change `size_mm` in
   `LABELS` (top of `source/make_labels.py`) — the layout scales, the fonts do
   not change.
 - **Claims.** Candles (confirmed): hand-poured in Kenya, 100% natural soy wax.
   Diffusers: "Made with essential oils", "Flame-free", "Reeds included",
-  "Eco-conscious", "100 ml / 3.4 fl oz", "Reed diffuser". There is no "Made in
+  "Eco-conscious", "200 ml / 6.8 fl oz", "Reed diffuser". There is no "Made in
   Kenya" line on the diffuser until where they are made is confirmed. All
   label text is in `LABELS`.
 - **Fonts.** The label fonts are fixed (approved on the mockups). Do not
   substitute them.
-- **Small text on diffusers.** At 40 × 60 mm the feature words print at about
-  4 pt. Ask the printer for a proof to confirm they read clearly.
 - **Net weight.** Weigh the wax in a filled jar; a 200 ml jar usually holds less
   than 200 g of soy wax.
 
@@ -183,7 +181,7 @@ The logo, monogram and favicon are regenerated with
 
 `mockups/` holds 3D renders built from the real label files: candles on a
 modelled clear 200 ml glass jar (72 mm × 86 mm) with white soy wax and a cotton
-wick; diffusers on a clear 100 ml bottle (58 mm wide) with an essential-oil fill
+wick; diffusers on a clear 200 ml bottle (72 mm wide) with an essential-oil fill
 and eight rattan reeds. They are renders, not photographs; replace them with product
 photography once production samples exist. The scene is in
 `source/mockup/scene.html` (three.js).

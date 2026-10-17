@@ -215,7 +215,7 @@ function splitName(name) {
 }
 
 /**
- * An illustration of the reed diffuser: a clear 100 ml glass bottle, reeds
+ * An illustration of the reed diffuser: a clear 200 ml glass bottle, reeds
  * reeds and the same white label as the candle. Replaced automatically by
  * `product.diffuserImage` once photography exists.
  */
@@ -266,7 +266,7 @@ export function diffuserArt(product, { size = 'md' } = {}) {
   <path d="M120 176 C121.6 180 123 182.5 122.6 185 C122.2 187.4 117.8 187.4 117.4 185 C117 182.5 118.6 180 120 176 Z" fill="none" stroke="#2B2A28" stroke-width=".6"/>
   <text x="120" y="199" text-anchor="middle" class="art-brand">RORO LUX</text>
   ${nameText}
-  <text x="120" y="254" text-anchor="middle" class="art-size">REED DIFFUSER · 100 ML</text>
+  <text x="120" y="254" text-anchor="middle" class="art-size">REED DIFFUSER · 200 ML</text>
 </svg>`;
 }
 

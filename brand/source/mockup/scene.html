@@ -165,8 +165,8 @@ function makeCandle(labelUrl) {
 }
 
 
-// ---------- Reed diffuser: 100 ml clear glass bottle, essential-oil blend, rattan reeds ----------
-const D_OUT = 2.9, D_IN = 2.68, D_BODY = 6.9, D_NECK_OUT = 0.98, D_NECK_IN = 0.76, D_SHOULDER = 8.4, D_TOP = 9.6, D_BASE = 0.5;
+// ---------- Reed diffuser: 200 ml clear glass bottle, essential-oil blend, rattan reeds ----------
+const D_OUT = 3.6, D_IN = 3.36, D_BODY = 8.6, D_NECK_OUT = 1.05, D_NECK_IN = 0.82, D_SHOULDER = 10.2, D_TOP = 11.4, D_BASE = 0.55;
 function bottleProfile() {
   const p = [];
   const arc = (cx, cy, rx, ry, a0, a1, n) => { for (let i = 0; i <= n; i++) { const a = a0 + (a1 - a0) * i / n; p.push(new THREE.Vector2(cx + rx * Math.cos(a), cy + ry * Math.sin(a))); } };
@@ -220,7 +220,7 @@ function makeDiffuser(labelUrl, seed = 1) {
   g.add(new THREE.Mesh(new THREE.LatheGeometry(bottleProfile(), 160), glassMat));
 
   // Essential-oil blend, filled to just under the shoulder.
-  const FILL = 5.4;
+  const FILL = D_BASE + 200 / (Math.PI * D_IN * D_IN);  // 200 ml of oil
   const oil = new THREE.Mesh(new THREE.CylinderGeometry(D_IN - 0.01, D_IN - 0.01, FILL - D_BASE, 120, 1), oilMat);
   oil.position.y = D_BASE + (FILL - D_BASE) / 2; g.add(oil);
   const surface = new THREE.Mesh(new THREE.CircleGeometry(D_IN - 0.012, 120),
@@ -237,7 +237,7 @@ function makeDiffuser(labelUrl, seed = 1) {
     const dir = new THREE.Vector3(Math.sin(tilt) * Math.cos(az), Math.cos(tilt), Math.sin(tilt) * Math.sin(az));
     const pivot = neck.clone().add(new THREE.Vector3((rnd() - 0.5) * 0.5, 0, (rnd() - 0.5) * 0.5));
     const bottom = pivot.clone().addScaledVector(dir, -8.6);
-    const top = pivot.clone().addScaledVector(dir, 18 + rnd() * 3);
+    const top = pivot.clone().addScaledVector(dir, 20 + rnd() * 3);
     const len = bottom.distanceTo(top);
     const reed = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, len, 10), reedMat);
     reed.position.copy(bottom).add(top).multiplyScalar(0.5);
@@ -245,16 +245,16 @@ function makeDiffuser(labelUrl, seed = 1) {
     reed.castShadow = true; g.add(reed);
   }
 
-  // 40 x 60 mm label on the straight part of the bottle.
-  wrapLabel(g, labelUrl, D_OUT, 4.0, 6.0, 3.65);
+  // 48 x 72 mm label on the straight part of the bottle.
+  wrapLabel(g, labelUrl, D_OUT, 4.8, 7.2, 4.55);
   contactShadow(g, D_OUT);
   return g;
 }
 
 // ---------- Layout ----------
 const isDiffuser = labels[0].startsWith('diffuser');
-const spacing = isDiffuser ? 7.4 : 8.3;
-const CAM_Z = isDiffuser ? 92 : 66;
+const spacing = isDiffuser ? 8.8 : 8.3;
+const CAM_Z = isDiffuser ? 112 : 66;
 labels.forEach((name, i) => {
   const c = isDiffuser ? makeDiffuser(`/labels/${name}.png`, i + 2) : makeCandle(`/labels/${name}.png`);
   const n = labels.length;
@@ -275,9 +275,9 @@ const fill = new THREE.DirectionalLight('#F3F6FF', 0.5); fill.position.set(30, 1
 scene.add(new THREE.HemisphereLight('#FFFFFF', '#D9CFC2', 0.25));
 
 const camera = new THREE.PerspectiveCamera(labels.length > 1 ? 26 : 22, W / H, 0.5, 600);
-if (isDiffuser && labels.length > 1) { camera.position.set(0, 20, CAM_Z); camera.lookAt(0, 12.5, 0); camera.fov = 24; camera.updateProjectionMatrix(); }
-else if (isDiffuser && view === 'close') { camera.position.set(0, 7, 24); camera.lookAt(0, 4.6, 0); camera.fov = 26; camera.updateProjectionMatrix(); }
-else if (isDiffuser) { camera.position.set(0, 14, 76); camera.lookAt(0, 14.4, 0); camera.fov = 26; camera.updateProjectionMatrix(); }
+if (isDiffuser && labels.length > 1) { camera.position.set(0, 22, CAM_Z); camera.lookAt(0, 14.5, 0); camera.fov = 24; camera.updateProjectionMatrix(); }
+else if (isDiffuser && view === 'close') { camera.position.set(0, 9, 30); camera.lookAt(0, 5.6, 0); camera.fov = 26; camera.updateProjectionMatrix(); }
+else if (isDiffuser) { camera.position.set(0, 15, 84); camera.lookAt(0, 16.2, 0); camera.fov = 26; camera.updateProjectionMatrix(); }
 else if (labels.length > 1) { camera.position.set(0, 21, CAM_Z); camera.lookAt(0, 4.4, 0); camera.fov = 24; camera.updateProjectionMatrix(); }
 else if (view === 'close') { camera.position.set(0, 7.5, 21); camera.lookAt(0, 4.6, 0); camera.fov = 26; camera.updateProjectionMatrix(); }
 else { camera.position.set(0, 19, 40); camera.lookAt(0, 4.2, 0); camera.fov = 24; camera.updateProjectionMatrix(); }

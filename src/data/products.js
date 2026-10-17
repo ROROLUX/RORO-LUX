@@ -23,7 +23,7 @@ export const PRICE_KES = 3000;
 export const SIZE_LABEL = '200 ml · 7.05 oz';
 
 export const DIFFUSER_PRICE_KES = 4500;
-export const DIFFUSER_SIZE_LABEL = '100 ml';
+export const DIFFUSER_SIZE_LABEL = '200 ml';
 
 // Per-format details used by product cards, pages and forms.
 export const FORMATS = {

@@ -39,7 +39,7 @@ export function diffusers() {
 ${pageHero({
   eyebrow: 'Reed diffusers',
   title: 'The same five feelings, without a flame.',
-  lede: 'Every fragrance in our collection, also as a reed diffuser — blended with essential oils, in a clear 100 ml glass bottle with reeds included. A constant, quiet presence for the rooms you live in.',
+  lede: 'Every fragrance in our collection, also as a reed diffuser — blended with essential oils, in a clear 200 ml glass bottle with reeds included. A constant, quiet presence for the rooms you live in.',
 })}
 <section class="section section-tight">
   <div class="container">
@@ -85,7 +85,7 @@ ${waitlistForm({ heading: 'Be the first to know.', format: 'diffuser' })}
     path: '/diffusers',
     title: 'Reed Diffusers',
     description:
-      'RORO LUX reed diffusers made with essential oils — Stay Grounded, Safe, Healing, Quiet the Noise and Balance. 100 ml clear glass bottles, KSh 4,500.',
+      'RORO LUX reed diffusers made with essential oils — Stay Grounded, Safe, Healing, Quiet the Noise and Balance. 200 ml clear glass bottles, KSh 4,500.',
     body,
     nav: 'diffusers',
   });

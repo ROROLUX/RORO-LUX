@@ -13,7 +13,7 @@ export const faqs = [
       },
       {
         q: 'How much will they cost?',
-        a: 'Each scented candle comes in a 200 ml clear glass jar and is priced at KSh 3,000. Each reed diffuser comes in a 100 ml clear glass bottle with reeds included and is priced at KSh 4,500.',
+        a: 'Each scented candle comes in a 200 ml clear glass jar and is priced at KSh 3,000. Each reed diffuser comes in a 200 ml clear glass bottle with reeds included and is priced at KSh 4,500.',
       },
       {
         q: 'How will I be able to pay?',
